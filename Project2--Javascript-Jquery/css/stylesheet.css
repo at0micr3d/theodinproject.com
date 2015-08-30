@@ -1,0 +1,25 @@
+.inline {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: -5px;
+	margin-top: 0px;
+	text-align: center;
+	height: 20px;
+	width: 20px;
+	display: inline-block;	
+	background-color: #b0c4de;
+}
+.divider {
+	margin: 0px;
+	border: 0px;
+}
+#squares {
+	margin: 20px auto;
+	width: 800px;
+	height: 800px;
+}
+body {
+	margin:0 auto;
+	border: 0px;	
+	text-align: center;
+}
