@@ -2,9 +2,10 @@ class Mastermind
 	@@peg_colors_explained = {:r => "red", :o => "orange", :y => "yellow", :g => "green", :b => "blue", :p => "purple"}
 	@@peg_colors = [:r, :o, :y, :g, :b, :p]
 	@@score_peg_colors = [:black, :white]
+	@@automatic_ai_feedback = false
 
 	def initialize()
-		@solution = [:r, :b, :r, :r] #the code
+		@solution = [:r, :y, :b, :r] #the code
 		@turn_input = [] #input of user. resets every turn.
 		@feedback = [] #feedback on input. resets every turn.
 		@turns = {} #storage of each turn information
@@ -35,28 +36,56 @@ class Mastermind
 		print_welcome_message_ai
 		input = gets.chomp.scan(/[roygbp]/).map { |e| e.to_sym }
 		if input.length == 4 #input is valid
+			@solution = input
 			@answers = generate_all_possibilities
 			until @win || @turn_nr == 11
-				@turn_input = get_ai_input(@answers)
-				evaluate_input(@turn_input, @solution)
+				@turn_input = get_ai_input!(@answers)
+				puts "Computer thinks there are still: #{@answers.length} possibilities left." unless @answers.length == 1
+				give_ai_feedback(@turn_input)
+				check_win
 				save_turn_and_reset
 				print_game
-				puts "still: #{@answers.length} possibilities over."
+			end
+			if @win 
+				puts "Computer won!" 
+			else
+				puts "Computer lost."
 			end
 		else
 			puts "Invalid code."	
 		end
 	end
 
-	def get_ai_input(answers)
-		unless @turns.empty?
+	def get_ai_input!(answers)
+		unless @turns.empty?	
+			#pretend for each answer that it is the code and check if it would have given the same output as the last feedback. If not then it can't be the code, so delete it..
 			answers.each do |k,v| 
-				answers.delete(k) unless @turns[@turn_nr-1][1] == evaluate_input(v, @solution)
+				answers.delete(k) unless @turns["turn #{@turn_nr-1}"][1].sort == evaluate_input(@turns["turn #{@turn_nr-1}"][0], v).sort
 			end
+			return answers.shift[1]
 		else
 			return answers.shift[1] #removes and returns the first array in the answers set
+		end		
+	end
+
+	def give_ai_feedback(turn_input)
+		if @@automatic_ai_feedback
+			@feedback = evaluate_input(turn_input, @solution)
+		else
+			puts "\nComputer gives you answer: #{turn_input.to_s.gsub(/[\[\],:]/, "")}\n"
+			puts "Your code is: #{@solution.to_s.gsub(/[\[\],:]/, "")}"
+			puts "Please give the computer your evaluation. Use b for black and w for white. Example:"
+			puts "bww"
+			feedback = gets.chomp.scan(/[bw]/).map do |i| 
+				case i.downcase
+				when "b"
+					i = :black
+				when "w"
+					i = :white
+				end
+			end
+			@feedback = feedback
 		end
-		#return [:r, :r, :r, :r]
 	end
 
 	def generate_all_possibilities
@@ -68,13 +97,14 @@ class Mastermind
 	end
 
 	def play_player
-		@solution = rand_solution
+		#@solution = rand_solution
 		print_welcome_message_player
 		until @win || @turn_nr == 11
 			get_user_input
 			@feedback = evaluate_input(@turn_input, @solution)
+			check_win
 			save_turn_and_reset
-			print_game
+			print_game			
 		end
 		if @win
 			puts "Congratulations! You win!"
@@ -94,6 +124,13 @@ class Mastermind
 		end		
 		puts "-----------------------"
 		puts "\n"
+	end
+
+	def check_win
+		#set victory condition to true if all four are black 
+		if @feedback.all? { |e| e == :black } && @feedback.length == 4
+			@win = true 				
+		end		
 	end
 
 	def save_turn_and_reset
@@ -135,10 +172,6 @@ class Mastermind
 					end
 				end
 			end			
-			#set victory condition to true if all four are black 
-			if feedback.all? { |e| e == :black } && feedback.length == 4
-				@win = true 				
-			end
 			#randomize feedback otherwise player might derive which position is okay
 			return feedback.shuffle!
 		end
@@ -153,6 +186,7 @@ class Mastermind
 			@turn_input = []
 		end
 	end
+
 	def print_welcome_message_player
 		puts "Play Mastermind! For info on rules see:"
 		puts "http://www.industrious.com/mastermind/gamerules.html"
