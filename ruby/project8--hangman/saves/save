@@ -1,0 +1,8 @@
+--- !ruby/object:Hangman
+secret_word: canceler
+guessed_letters:
+- s
+- b
+turns: 13
+lost: false
+won: false

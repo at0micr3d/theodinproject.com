@@ -32,6 +32,8 @@ class Mastermind
 		end
 	end
 
+	private
+	
 	def play_ai
 		print_welcome_message_ai
 		input = gets.chomp.scan(/[roygbp]/).map { |e| e.to_sym }
