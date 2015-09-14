@@ -26,7 +26,10 @@ class Hangman
 			end
 		end
 		puts "\nCongratulations! You won!" if @won
-		puts "\nUnfortunately, you ... hang." if @lost
+		if @lost
+			puts "\nUnfortunately, you ... hang." 
+			puts "The correct answer was: #{@secret_word}"
+		end
 	end
 
 	def give_feedback

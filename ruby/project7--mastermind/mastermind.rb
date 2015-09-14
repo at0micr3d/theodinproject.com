@@ -76,7 +76,7 @@ class Mastermind
 		else
 			puts "\nComputer gives you answer: #{turn_input.to_s.gsub(/[\[\],:]/, "")}\n"
 			puts "Your code is: #{@solution.to_s.gsub(/[\[\],:]/, "")}"
-			puts "Please give the computer your evaluation. Use b for black and w for white. Example:"
+			puts "Please give the computer your evaluation. Use b for black (good color & good position) and w for white (good color but incorrect position). Example:"
 			puts "bww"
 			feedback = gets.chomp.scan(/[bw]/).map do |i| 
 				case i.downcase
