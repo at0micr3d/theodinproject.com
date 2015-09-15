@@ -4,19 +4,27 @@ class Fibonnaci
 	end
 	
 	def fibs(n)
-		return @memory[n] if @memory.has_key?(n)
-		case 
-		when n <= 2
-			return 1
-		when n > 2
-			result = fibs(n-2)+fibs(n-1)
+		arr = []
+		for i in (1..n)
+			arr << 1 if i == 1
+			arr << 1 if i == 2
+			arr << (arr[arr.length-2] + arr[arr.length-1]) if i >= 3
 		end
-		@memory[n] ||= result
-		return result
+		arr[arr.length-1]
+	end
+
+	def fibs_rec(n)
+		return @memory[n] if @memory.has_key?(n)
+		return 1 if n <= 2
+		return @memory[n] ||= fibs_rec(n-2)+fibs_rec(n-1) if n > 2
 	end
 end
 
 f = Fibonnaci.new
 (1..100).to_a.each do |i|
+	puts "fib #{i} = #{f.fibs_rec(i)}"
+end
+
+(1..10).to_a.each do |i|
 	puts "fib #{i} = #{f.fibs(i)}"
 end
