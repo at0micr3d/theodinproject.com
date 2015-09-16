@@ -34,21 +34,24 @@ module Binary_tree
 
 	def self.dfs_rec(current_node, to_find_val)
 		return_node = nil
-		case current_node.value <=> to_find_val
+		case current_node.value.to_i <=> to_find_val.to_i
 	  when -1
 		 	begin
-		 		dfs_rec(current_node.right, to_find_val)
-		 	rescue				
+		 		return_node = dfs_rec(current_node.right, to_find_val)
+		 	rescue
+
 			end
 		when 0		
 			return_node = current_node
 		when 1
 			begin
-		 		dfs_rec(current_node.left, to_find_val)
-		 	rescue				
+		 		return_node = dfs_rec(current_node.left, to_find_val)
+		 	rescue
+
 			end
 		end
-		return return_node.value
+		return return_node if return_node != nil
+		#return nil if return_node == nil
 	end
 	
 
@@ -62,10 +65,10 @@ module Binary_tree
 		root
 	end	
 end
-	
 
-# build_tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-root = Binary_tree::build_tree([1, 7, 4, 23])
-p Binary_tree::find_in_tree(root, 7)
+#arr = [1, 7, 4, 23]	
+arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+root = Binary_tree.build_tree(arr)
+p Binary_tree.dfs_rec(root, 7)
 
 
