@@ -9,15 +9,15 @@ module Binary_tree
 
 	def self.add_to_tree(current_node, to_add_node)
 		if current_node.value >= to_add_node.value
-			begin
+			if current_node.left.is_a?(Node)
 				add_to_tree(current_node.left, to_add_node)
-			rescue
+			else
 				current_node.left = to_add_node
 			end
 		else
-			begin
+			if current_node.right.is_a?(Node)
 				add_to_tree(current_node.right, to_add_node)
-			rescue
+			else
 				current_node.right = to_add_node
 			end
 		end
@@ -36,22 +36,17 @@ module Binary_tree
 		return_node = nil
 		case current_node.value.to_i <=> to_find_val.to_i
 	  when -1
-		 	begin
+		 	if current_node.right.is_a?(Node)
 		 		return_node = dfs_rec(current_node.right, to_find_val)
-		 	rescue
-
 			end
-		when 0		
+		when 0 
 			return_node = current_node
 		when 1
-			begin
+			if current_node.left.is_a?(Node)
 		 		return_node = dfs_rec(current_node.left, to_find_val)
-		 	rescue
-
-			end
+		 	end
 		end
-		return return_node if return_node != nil
-		#return nil if return_node == nil
+		return return_node
 	end
 	
 
@@ -66,9 +61,8 @@ module Binary_tree
 	end	
 end
 
-#arr = [1, 7, 4, 23]	
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-root = Binary_tree.build_tree(arr)
-p Binary_tree.dfs_rec(root, 7)
+root = Binary_tree.build_tree(arr) #use '.' for function calls from modules
+p Binary_tree::dfs_rec(root, 5).value #use '::' for variable/constant calls from modules
 
 
