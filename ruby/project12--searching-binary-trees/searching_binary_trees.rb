@@ -9,6 +9,18 @@ module Binary_tree
 		end
 	end
 
+	class Stack < Array
+	end
+
+	class Self_defined_queue < Queue
+		def push(element)
+			enq(element)
+		end
+		def pop
+			deq
+		end
+	end
+
 	def self.add_to_tree(current_node, to_add_node)
 		if current_node.value >= to_add_node.value
 			if current_node.left.is_a?(Node)
@@ -25,48 +37,35 @@ module Binary_tree
 		end
 	end
 
-	def self.breadth_first_search(root, val)
-		queue = Queue.new
-		queue.enq root
-		while !queue.empty?
-			current_node = queue.deq
+	def self.search_tree(root, val, container)
+		container.push root
+		while !container.empty?
+			current_node = container.pop
 			if current_node.right.is_a?(Node)
 				if current_node.right.value == val
 					return current_node.right
 				else
-					queue.enq current_node.right
+					container.push current_node.right
 				end
 			end
 			if current_node.left.is_a?(Node)
 				if current_node.left.value == val
 					return current_node.left
 				else
-					queue.enq current_node.left
+					container.push current_node.left
 				end
 			end
 		end
-		return nil #if this is reached then no solution was found.
+	end
+
+	def self.breadth_first_search(root, val)
+		queue = Self_defined_queue.new
+		search_tree(root, val, queue)
 	end
 
 	def self.depth_first_search(root, val)
-		stack = [root]
-		while !stack.empty?
-			current_node = stack.pop
-			if current_node.right.is_a?(Node)
-				if current_node.right.value == val
-					return current_node.right
-				else
-					stack.push current_node.right
-				end
-			end
-			if current_node.left.is_a?(Node)
-				if current_node.left.value == val
-					return current_node.left
-				else
-					stack.push current_node.left
-				end
-			end
-		end
+		stack = Stack.new
+		search_tree(root, val, stack)
 	end
 
 
@@ -84,8 +83,7 @@ module Binary_tree
 		 		return_node = dfs_rec(current_node.left, to_find_val)
 		 	end
 		end
-	end
-	
+	end	
 
 	def self.build_tree(arr)
 		arr = arr.shuffle
