@@ -1,12 +1,20 @@
 require 'pry'
 
-class Location
-	attr_accessor :pos, :visited
-	
-	def initialize(pos)
-		@pos = pos
-		@visited = false
+class Node
+	attr_accessor :parent, :position
+
+	def initialize(position = [0,0])
+		@position = position
+		@parent = []
 	end
+
+	def ==(another_node)
+    @position[0] == another_node.position[0] && @position[1] == another_node.position[1] 
+  end
+
+  def empty?
+  	false
+  end
 end
 
 class Board
@@ -38,31 +46,33 @@ class Knight
 
 	def initialize
 		@b = Board.new
+		@queue = Queue.new
 		@possible_moves = [[1,2], [-1,2], [-1,-2], [1,-2], [2,1], [-2,1], [-2,-1], [2,-1]]
 	end
 	
 	#return the moves that the knight needs to take to get from pos1 to pos2
 	def knight_moves(pos1, pos2)
-		stack = []
-		stack.push pos1
-		while !stack.empty?
-			current_pos = stack.pop
-			@possible_moves.each do |move| 
-				new_position = new_pos(current_pos, move)
-				if @b.valid_pos?(new_position) #new position is not outside the board?
-					if new_position == pos2 #is the new position equal to the position that is looked for
-						return print_moves(stack, pos1, pos2)
-					end
-					if @b.board[new_position][:visited] == false #check if the position is already visited 
-						stack.push new_position 
-						@b.board[new_position][:visited] = true
-					end
-				end
-			end
-		end
+		root = Node.new(pos1)
+		breadth_first_search(root, pos2)
 	end
 
 	private
+	
+	def breadth_first_search(parent, to_find_pos)
+		@possible_moves.each do |direction|
+			new_position = new_pos(parent.position, direction)
+			if @b.valid_pos?(new_position) && @b.board[new_position][:visited] == false
+		 		n = Node.new(new_position)
+		 		n.parent = parent
+		 		if n.position == to_find_pos
+		 			print_moves n
+		 		end
+		 		@queue.enq(n)
+		 		@b.board[n.position][:visited] = true
+	 		end		 		
+		end
+	 	breadth_first_search(@queue.deq, to_find_pos) if not @queue.empty?
+	end
 
 	def new_pos(pos, direction)
 		new_pos = [0, 0]
@@ -71,13 +81,26 @@ class Knight
 		return new_pos
 	end
 
-	def print_moves(stack, pos1 ,pos2)
-		puts "You made it in #{stack.length + 1} moves!  Here's your path:"
-		puts pos1.to_s
-		stack.each { | k | puts k.to_s }
-		puts pos2.to_s
-	end	
+	def print_moves(node)
+		travel_list = list_parents(node).reverse
+		puts "You made it in #{travel_list.length - 1} moves!  Here's your path:"
+		travel_list.each { | k | puts k.to_s }		
+	end
+
+	def list_parents(node, list = [node.position])
+    list_parents(node.parent, list << node.parent.position) unless node.parent.kind_of? Array
+    list
+  end
 end
 
-#knight = Knight.new.knight_moves([3,3], [4,5])
-knight = Knight.new.knight_moves([3,3], [1,1])
+
+3.times do
+	#creates a random from and to position
+	puts "__________________________________________"
+	knight = Knight.new.knight_moves([[*1..6].sample,[*1..6].sample], [[*1..6].sample,[*1..6].sample])
+	puts "__________________________________________"
+	puts ""
+end
+
+
+
