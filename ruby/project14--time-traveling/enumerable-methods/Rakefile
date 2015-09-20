@@ -2,7 +2,7 @@ begin
   require 'rspec/core/rake_task'
 
   RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = "-c -w --format d"
+  t.rspec_opts = "-c --format d --fail-fast"
   t.verbose = false
   end
 

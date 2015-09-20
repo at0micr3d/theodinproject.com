@@ -1,3 +1,5 @@
+require 'pry'
+
 module Enumerable
 	def my_each
 		for i in 0..self.length - 1
@@ -20,9 +22,12 @@ module Enumerable
 	end
 
 	def my_all?
-		ret = []
-		self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
-		ret.sort == self.sort
+		if block_given?
+			ret = []
+			self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
+			return ret.length.to_i == self.length.to_i
+		end
+		return self.my_select {|i| (i != false || i != nil) }.length == self.length
 	end
 
 	def my_any?
@@ -56,7 +61,7 @@ module Enumerable
 		self.my_each {|i| ret << proc.call(i)}
 		return ret
 	end
-
+	
 	def my_map_proc_or_block(block, proc = false)
 		ret = []
 		for i in 0..self.length
