@@ -27,7 +27,7 @@ module Enumerable
 			self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
 			return ret.length.to_i == self.length.to_i
 		end
-		return self.my_select {|i| (i != false || i != nil) }.length == self.length
+		return self.my_select {|i| (i == false || i == nil) }.length == 0
 	end
 
 	def my_any?
@@ -37,14 +37,17 @@ module Enumerable
 	end
 
 	def my_none?
-		ret = []
-		self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
-		ret.length == 0
+		if block_given?
+			ret = []
+			self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
+			return ret.length == 0
+		end
+		return self.my_select {|i| (i == false || i == nil) }.length == 0
 	end
 
 	def my_count(opt = false)
 		return self.my_select {|i| i == opt}.length if opt != false #only nil and false return false. 
-		return self.length if not block_given?
+		return self.length if not block_given? && opt == false
 		ret = []
 		self.my_each_with_index {|it, ind| ret << it if yield self[ind]}
 		return ret.length
