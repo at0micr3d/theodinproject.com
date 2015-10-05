@@ -9,6 +9,7 @@
 
 ##Design
 -game class (game state, game rules, next moves, etc)
+-board class (or integrate with game class?)
 -player class and AI class? (game class asks player for move, player or AI class uses game class to ask possibilities, allowed?, etc)
 -chess piece classes with inheritance to class for common data and methods. (in seperate ruby file)
 -
