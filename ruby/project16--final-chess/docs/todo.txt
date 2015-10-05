@@ -1,0 +1,14 @@
+#Todo
+
+##List
+-saving and loading
+-chess piece classes
+-AI (for inspiration -> http://jeffbradberry.com/posts/2015/09/intro-to-monte-carlo-tree-search/)
+-detect check and checkmate
+-
+
+##Design
+-game class (game state, game rules, next moves, etc)
+-player class and AI class? (game class asks player for move, player or AI class uses game class to ask possibilities, allowed?, etc)
+-chess piece classes with inheritance to class for common data and methods. (in seperate ruby file)
+-
