@@ -34,19 +34,51 @@ describe "Board" do
 
   describe "#print_positions" do
     it "has 8 white pawns" do
-      board.print_positions
-#      expect(board.print_positions.scan(/U+2659/).length).to be(8) 
+      expect(board.print_positions.scan(/\u2659/).length).to be(8) 
     end
-    
+
+    it "has 8 black pawns" do
+      expect(board.print_positions.scan(/\u265F/).length).to be(8) 
+    end
+
+    it "has 1 white and 1 black king" do
+      expect(board.print_positions.scan(/\u2654/).length).to be(1)
+      expect(board.print_positions.scan(/\u265A/).length).to be(1)
+    end
+
+    it "has 1 white and 1 black queen" do
+      expect(board.print_positions.scan(/\u2655/).length).to be(1)
+      expect(board.print_positions.scan(/\u265B/).length).to be(1)
+    end
+
+    it "has 2 white and 2 black knights" do
+      expect(board.print_positions.scan(/\u2658/).length).to be(2)
+      expect(board.print_positions.scan(/\u265E/).length).to be(2)
+    end
+
+    it "has 2 white and 2 black rooks" do
+      expect(board.print_positions.scan(/\u2656/).length).to be(2)
+      expect(board.print_positions.scan(/\u265C/).length).to be(2)
+    end
+
+    it "has 2 white and 2 black bishops" do
+      expect(board.print_positions.scan(/\u2657/).length).to be(2)
+      expect(board.print_positions.scan(/\u265D/).length).to be(2)
+    end
   end
 end
 
-# describe "Game" do
-#   before :each do
-#     @game = Game.new(ConnectFour.new)
-#   end
+describe "Chess" do
+  let(:chess) {Chess.new}
 
-#   describe "#new" do
+
+end
+  # describe "Game" do
+  #   before :each do
+  #     @game = Game.new(ConnectFour.new)
+  #   end
+
+  #   describe "#new" do
 
 #     it "creates 2 players" do
 #       player1 = @game.current_player.next

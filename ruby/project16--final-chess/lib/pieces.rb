@@ -29,7 +29,7 @@ class Pawn < Piece
     when :b
       @unicode = "\u265F"
     end
-    @possible_moves = [[0,1]]
+    @possible_moves = [[0,1],[0,-1]]
     @nr_moves = 0
   end
 end
