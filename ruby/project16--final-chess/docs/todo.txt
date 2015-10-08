@@ -2,10 +2,10 @@
 
 ##List
 -saving and loading
--chess piece classes
 -AI (for inspiration -> http://jeffbradberry.com/posts/2015/09/intro-to-monte-carlo-tree-search/)
--detect check and checkmate
--
+-network play
+-detect check, stalemate and checkmate
+-special moves: promotion, castling, taking-en passant
 
 ##Design
 -game class (game state, game rules, next moves, etc)

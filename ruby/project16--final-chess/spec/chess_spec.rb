@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 # silence the to be tested program. ie no output to stderr or stdout. 
-# RSpec.configure do |config|
-#   original_stderr = $stderr
-#   original_stdout = $stdout
-#   config.before(:all) do
-#     # Redirect stderr and stdout
-#     $stderr = File.open(File::NULL, "w")
-#     $stdout = File.open(File::NULL, "w")
-#   end
-#   config.after(:all) do
-#     $stderr = original_stderr
-#     $stdout = original_stdout
-#   end
-# end
+RSpec.configure do |config|
+  original_stderr = $stderr
+  original_stdout = $stdout
+  config.before(:all) do
+    # Redirect stderr and stdout
+    $stderr = File.open(File::NULL, "w")
+    $stdout = File.open(File::NULL, "w")
+  end
+  config.after(:all) do
+    $stderr = original_stderr
+    $stdout = original_stdout
+  end
+end
 
 describe "Board" do
   let(:board) { Board.new }    
@@ -69,10 +69,18 @@ describe "Board" do
 end
 
 describe "Chess" do
-  let(:chess) {Chess.new}
+  let(:game) { Chess.new }
 
-
+  describe "#make_move" do
+    it "can move a pawn 1 square" do
+      args = [1,2], [1,3], :w
+      game.make_move(args)
+      expect(game.board.position[[1,3]].type).to be(:pawn)
+    end
+  end
+  
 end
+
   # describe "Game" do
   #   before :each do
   #     @game = Game.new(ConnectFour.new)

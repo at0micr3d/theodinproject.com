@@ -3,6 +3,7 @@ require 'pry'
 
 class Board
   attr_accessor :position
+  
   def initialize
     @position = Hash.new
     create_positions
@@ -81,7 +82,7 @@ class Board
 end
 
 class Chess
-  attr_reader :status
+  attr_reader :status, :board
   
   def initialize
     @board = Board.new
@@ -133,6 +134,7 @@ class Chess
     # make_move function prints board and returns true if the move was valid. gives error message and returns false if not.
     if move_executed == true
       puts @board.print_positions
+      check?
       return true
     else
       puts "That move is not valid. Please try again."
@@ -179,6 +181,33 @@ class Chess
     end
   end
 
+  # returns true if the game is in a check state. i.e. if one of the two players can take the king of the other player in the next move
+  def check?
+    #find the kings positions
+    pos_black_king = []
+    pos_white_king = []
+    @board.position.each do |cell, piece|
+      if piece != nil
+        pos_black_king = cell if piece.color == :b && piece.type == :king
+        pos_white_king = cell if piece.color == :w && piece.type == :king
+      end
+    end 
+
+    # are there any pieces on the board that can take the other colors king?
+    king_in_check = false
+    @board.position.each do |cell, piece|
+      if piece != nil
+        if piece.color == :w
+          king_in_check = piece.possible_moves.any? { |dir| cell[0] + dir[0] == pos_black_king[0] && cell[1] + dir[1] == pos_black_king[1] }
+        end
+        if piece.color == :b
+          king_in_check = piece.possible_moves.any? { |dir| cell[0] + dir[0] == pos_white_king[0] && cell[1] + dir[1] == pos_white_king[1] }
+        end
+      end
+    end 
+
+    return king_in_check
+  end
 end
 
 class Game
