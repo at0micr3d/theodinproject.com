@@ -9,6 +9,7 @@ class Board
     create_positions
   end
 
+  # returns a string that represents the board as visualization of the game state to the user.
   def print_positions
     return  %Q{
         +---+---+---+---+---+---+---+---+
@@ -34,14 +35,14 @@ class Board
 
   private
 
-# prints the individual squares on the board. is able to handle both pieces and empty squares. returns a string.
-def print_sqr(position_value)
-  if position_value != nil
-    return position_value.unicode
-  else
-    return " "
+  # prints the individual squares on the board. is able to handle both pieces and empty squares. returns a string.
+  def print_sqr(position_value)
+    if position_value != nil
+      return position_value.unicode
+    else
+      return " "
+    end
   end
-end
 
   # Creates the chess board with all pieces. pieces are seperate classes. the board is a hash with 1x2 arrays as keys. function returns nothing but populates instance variable @position.
   def create_positions
@@ -73,11 +74,11 @@ end
     @position[[6,8]] = Bishop.new(:b)
     @position[[6,1]] = Bishop.new(:w)
     # add kings
-    @position[[4,8]] = King.new(:b)
-    @position[[4,1]] = King.new(:w)
+    @position[[5,8]] = King.new(:b)
+    @position[[5,1]] = King.new(:w)
     # add queens
-    @position[[5,8]] = Queen.new(:b)
-    @position[[5,1]] = Queen.new(:w)
+    @position[[4,8]] = Queen.new(:b)
+    @position[[4,1]] = Queen.new(:w)
   end
 end
 
@@ -96,7 +97,7 @@ class Chess
     #stub
   end
   
-  #main method of the class. contains most of the game logic. moves pieces around the board.
+  #main method of the class. this is where the magic happens. contains most of the game logic. moves pieces around the board.
   def make_move(arg)
     from = arg[0]
     to = arg[1]
@@ -115,28 +116,50 @@ class Chess
         # normal case where pawn moves 1 step forward. pawn can not take another piece that is right in front of it.
         if valid_to?(from, to, color) && @board.position[to] == nil
           move_piece(from, to)
+          piece.nr_moves =+ 1
           move_executed = true
         end
         # first move for pawn where he can take 2 steps forward
         if move_executed == false && piece.nr_moves == 0 && (from[1] + 2 == to[1] || from[1] - 2 == to[1])
           move_piece(from, to)
+          piece.nr_moves =+ 1          
           move_executed = true
         end
         # en-passant move for pawn where he moves 1 step forward and 1 to the side and
         # takes another piece of the board ..
         if move_executed == false && en_passant?(from, to)
           move_piece(from, to)
+          piece.nr_moves =+ 1
           @board.position[[from[0], to[1]]] = nil # set opposing piece position to nil
           move_executed = true
         end
-      when :king, :rook
-        # normal case where pawn moves 1 step forward
+      when :king
+        # normal case where king or rook moves 1 step
         if valid_to?(from, to, color)
           move_piece(from, to)
+          piece.nr_moves =+ 1
           move_executed = true
         end
-        # castling move where castle replaces the king and the king moves 2 left or right
-        # ..
+        # castling move where rook replaces the king and the king moves 2 or 3 left or right
+        if move_executed == false && castling?(from, to)
+          move_piece(from, to)
+          piece.nr_moves =+ 1
+
+          # move the rook
+          if to[0] > 4  # if its larger than 4 its on the right side of the board else left
+            move_piece([8, from[1]], [to[0]-1, from[1]])
+          else
+            move_piece([1, from[1]], [to[0]+1, from[1]])
+          end
+
+          move_executed = true
+        end
+      when :rook
+        if valid_to?(from, to, color)
+          move_piece(from, to)
+          piece.nr_moves =+ 1
+          move_executed = true
+        end        
       end
     end
 
@@ -158,6 +181,7 @@ class Chess
 
   private
 
+  # move a piece from location 'from' to location 'to'
   def move_piece(from,to)
     @board.position[to] = @board.position[from]
     @board.position[from] = nil
@@ -190,34 +214,6 @@ class Chess
     end
   end
 
-  # returns true if the game is in a check state. i.e. if one of the two players can take the king of the other player in the next move
-  def check?
-    #find the kings positions
-    pos_black_king = []
-    pos_white_king = []
-    @board.position.each do |cell, piece|
-      if piece != nil
-        pos_black_king = cell if piece.color == :b && piece.type == :king
-        pos_white_king = cell if piece.color == :w && piece.type == :king
-      end
-    end 
-
-    # are there any pieces on the board that can take the other colors king?
-    king_in_check = false
-    @board.position.each do |cell, piece|
-      if piece != nil
-        if piece.color == :w
-          king_in_check = piece.possible_moves.any? { |dir| cell[0] + dir[0] == pos_black_king[0] && cell[1] + dir[1] == pos_black_king[1] }
-        end
-        if piece.color == :b
-          king_in_check = piece.possible_moves.any? { |dir| cell[0] + dir[0] == pos_white_king[0] && cell[1] + dir[1] == pos_white_king[1] }
-        end
-      end
-    end 
-
-    return king_in_check
-  end
-
   # returns true if the move is en-passant, otherwise false
   def en_passant?(from, to)
     if from[1] > to[1]
@@ -242,6 +238,94 @@ class Chess
       return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && piece_has_enemy_piece_in_front
     end
   end
+
+  # checks if castling is possible. takes the kings from position and the position the king will be after the castling. returns true if so, otherwise false
+  def castling?(from, to)
+    king = @board.position[from]
+    # rules:
+    # The king that makes the castling move has not yet moved in the game.
+    king_not_moved_yet = king.nr_moves == 0
+
+    # The rook that makes the castling move has not yet moved in the game. The King and rook must occupy the same rank (or row).
+    if from[1] > 1
+      # black is castling
+      if to[0] > 5
+        # right rook is used for castling
+        rook_not_moved_yet = @board.position[[8,8]].nr_moves == 0
+      else
+        # left rook is used for castling
+        rook_not_moved_yet = @board.position[[1,8]].nr_moves == 0
+      end
+    else
+      # white is castling
+      if to[0] > 5
+        # right rook is used for castling
+        rook_not_moved_yet = @board.position[[8,1]].nr_moves == 0
+      else
+        # left rook is used for castling
+        rook_not_moved_yet = @board.position[[1,1]].nr_moves == 0
+      end
+    end
+
+    # The king is not in check.
+    # The king does not move over a square that is attacked by an enemy piece during the castling move, i.e., when castling, there may not be an enemy piece that can move (in case of pawns: by diagonal movement) to a square that is moved over by the king.
+    #   The king does not move to a square that is attacked by an enemy piece during the castling move, i.e., you may not castle and end the move with the king in check.
+    # Code explanation: check if any position in the range between the from and to location of the kings move can be reached (captured) by an enemy piece
+    pos_in_range_is_capturable = false
+
+    move_range_start = [from[0], to[0]].min
+    move_range_end = move_range_start + (from[0] - to[0]).abs
+    y_val = from[1]
+    for i in move_range_start..move_range_end
+      if capturable?([i, y_val], king.color)
+        pos_in_range_is_capturable = true
+      end
+    end
+
+    #   All squares between the rook and king before the castling move are empty.
+    pos_in_range_is_empty = true
+    move_range_start = [from[0], to[0]].min
+    move_range_end = move_range_start + (from[0] - to[0]).abs
+    y_val = from[1]
+    for i in (move_range_start + 1)..move_range_end
+      if @board.position[[i, y_val]] != nil
+        pos_in_range_is_empty = false
+      end
+    end
+
+    # if all conditions are met return true
+    return king_not_moved_yet && rook_not_moved_yet && !pos_in_range_is_capturable && pos_in_range_is_empty
+  end
+
+  # returns true if the game is in a check state. i.e. if one of the two players can take the king of the other player in the next move
+  def check?
+    #find the kings positions
+    pos_black_king = []
+    pos_white_king = []
+    @board.position.each do |cell, piece|
+      if piece != nil
+        pos_black_king = cell if piece.color == :b && piece.type == :king
+        pos_white_king = cell if piece.color == :w && piece.type == :king
+      end
+    end 
+
+    # are there any pieces on the board that can take the other colors king?
+    return capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
+  end
+
+  # checks if the given position can be reached from an enemy piece. (not the color that is given) returns true if so, otherwise false
+  def capturable?(position, color)
+    piece_capturable = false
+    @board.position.each do |cell, piece|
+      if piece != nil && piece.color != color
+          piece_capturable = piece.possible_moves.any? { |dir| cell[0] + dir[0] == position[0] && cell[1] + dir[1] == position[1] }
+          break if piece_capturable
+      end
+    end 
+    return piece_capturable
+  end
+
+
 end
 
 class Game
@@ -254,6 +338,7 @@ class Game
     @players = [Human.new(colors[0].to_sym), Human.new(colors[1].to_sym)].cycle
   end
 
+  # start the game and loop until game state is no longer ongoing
   def start
     while @chess.status == :ongoing
       # get a move from the next player and make it. repeat until its valid. (returns true)
@@ -300,6 +385,7 @@ class Human
     return [move[0], move[1], @color.to_sym]
   end
 
+  # change the letter part of the user input to a letter and change string to to array
   def parse(move)
     # replace all letters with the number that is used internally
     move.map! do |e|

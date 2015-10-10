@@ -1,7 +1,10 @@
 class Piece
   attr_reader :color, :type, :unicode, :possible_moves
+  attr_accessor :nr_moves
+  
   def initialize(color)
     @color = color
+    @nr_moves = 0
   end
 end
 
@@ -19,9 +22,7 @@ class King < Piece
   end
 end
 
-class Pawn < Piece
-  attr_reader :nr_moves
-  
+class Pawn < Piece  
   def initialize(color)
     super(color)
     @type = :pawn
@@ -32,7 +33,6 @@ class Pawn < Piece
       @unicode = "\u265F"
     end
     @possible_moves = [[0,1],[0,-1]]
-    @nr_moves = 0
   end
 end
 

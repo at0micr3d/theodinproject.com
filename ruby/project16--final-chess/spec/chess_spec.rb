@@ -145,45 +145,46 @@ describe "Chess" do
 			end
 
 			it "can move a queen in all possible directions" do
-				game.make_move([[4,2], [4,3], :w])
-				game.make_move([[4,3], [4,4], :w])         
-				game.make_move([[5,1], [4,2], :w])
-				game.make_move([[4,2], [4,3], :w])
-				game.make_move([[4,3], [6,3], :w])
-				game.make_move([[6,3], [4,5], :w])                  
-				expect(game.board.position[[4,5]].type).to be(:queen)
+				game.make_move([[5,2], [5,3], :w])
+				game.make_move([[5,3], [5,4], :w])         
+				# move queen
+				game.make_move([[4,1], [5,2], :w])
+				game.make_move([[5,2], [5,3], :w])
+				game.make_move([[5,3], [7,3], :w])
+				game.make_move([[7,3], [8,4], :w])                  
+				expect(game.board.position[[8,4]].type).to be(:queen)
 				pieces_present(16, 2, 2, 4, 4, 4)
 			end
 
 			it "can move a king in all possible directions" do
-				game.make_move([[4,2], [4,3], :w])
-				game.make_move([[4,3], [4,4], :w])
-				game.make_move([[4,4], [4,5], :w])
-				game.make_move([[4,5], [4,6], :w])
-			#kings moves
-			game.make_move([[4,1], [4,2], :w])
-			game.make_move([[4,2], [4,3], :w])
-			game.make_move([[4,3], [5,3], :w])
-			game.make_move([[5,3], [5,4], :w])
-			game.make_move([[5,4], [4,4], :w])
-			game.make_move([[4,4], [4,3], :w])
-			game.make_move([[4,3], [5,3], :w])
-			expect(game.board.position[[5,3]].type).to be(:king)
-			pieces_present(16, 2, 2, 4, 4, 4)
+				game.make_move([[5,2], [5,3], :w])
+				game.make_move([[5,3], [5,4], :w])
+				game.make_move([[5,4], [5,5], :w])
+				game.make_move([[5,5], [5,6], :w])
+			   #kings moves
+			   game.make_move([[5,1], [5,2], :w])
+			   game.make_move([[5,2], [5,3], :w])
+			   game.make_move([[5,3], [6,3], :w])
+			   game.make_move([[6,3], [6,4], :w])
+			   game.make_move([[6,4], [5,4], :w])
+			   game.make_move([[5,4], [5,3], :w])
+			   game.make_move([[5,3], [6,3], :w])
+			   expect(game.board.position[[6,3]].type).to be(:king)
+			   pieces_present(16, 2, 2, 4, 4, 4)
 			end
 
 			it "can move a rook in all possible directions" do
 				game.make_move([[1,2], [1,3], :w])
 				game.make_move([[1,3], [1,4], :w])
 				game.make_move([[1,4], [1,5], :w])
-			#rook moves
-			game.make_move([[1,1], [1,3], :w])
-			game.make_move([[1,3], [4,3], :w])
-			game.make_move([[4,3], [4,5], :w])
-			game.make_move([[4,5], [3,5], :w])
-			game.make_move([[3,5], [3,3], :w])         
-			expect(game.board.position[[3,3]].type).to be(:rook)
-			pieces_present(16, 2, 2, 4, 4, 4)
+			   #rook moves
+			   game.make_move([[1,1], [1,3], :w])
+			   game.make_move([[1,3], [4,3], :w])
+			   game.make_move([[4,3], [4,5], :w])
+			   game.make_move([[4,5], [3,5], :w])
+			   game.make_move([[3,5], [3,3], :w])         
+			   expect(game.board.position[[3,3]].type).to be(:rook)
+			   pieces_present(16, 2, 2, 4, 4, 4)
 			end
 		end
 
@@ -203,6 +204,17 @@ describe "Chess" do
 				game.make_move([[1,4], [2,5], :w])
 				expect(game.board.position[[2,5]].type).to be(:pawn)
 				expect(game.board.position[[1,5]]).to be(nil)
+				pieces_present(15, 2, 2, 4, 4, 4)
+			end
+
+			it "can switch a king and rook by castling" do
+				game.make_move([[5,2], [5,4], :w])
+				game.make_move([[6,1], [3,4], :w])
+				game.make_move([[7,1], [6,3], :w])
+				game.make_move([[5,1], [7,1], :w])				
+				expect(game.board.position[[7,1]].type).to be(:king)
+				expect(game.board.position[[6,1]].type).to be(:rook)
+				pieces_present(16, 2, 2, 4, 4, 4)
 			end
 		end
 	end
