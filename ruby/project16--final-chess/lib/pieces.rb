@@ -20,6 +20,8 @@ class King < Piece
 end
 
 class Pawn < Piece
+  attr_reader :nr_moves
+  
   def initialize(color)
     super(color)
     @type = :pawn

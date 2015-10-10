@@ -103,8 +103,9 @@ class Chess
     color = arg[2]
     move_executed = false
 
-    if valid_from?(from, color) 
-      case @board.position[from].type
+    if valid_from?(from, color)
+      piece = @board.position[from]
+      case piece.type
       when :knight, :bishop, :queen
         if valid_to?(from, to, color)
           move_piece(from, to)
@@ -116,17 +117,26 @@ class Chess
           move_piece(from, to)
           move_executed = true
         end
-      # first move for pawn where he can take 2 steps forward .. en-passant
-      # move for pawn where he moves 1 step forward and 1 to the side and
-      # takes another piece of the board ..
-    when :king, :rook
-      # normal case where pawn moves 1 step forward
-      if valid_to?(from, to, color)
-        move_piece(from, to)
-        move_executed = true
-      end
-      # castling move where castle replaces the king and the king moves 2 left or right
-      # ..
+        # first move for pawn where he can take 2 steps forward
+        if move_executed == false && piece.nr_moves == 0 && (from[1] + 2 == to[1] || from[1] - 2 == to[1])
+          move_piece(from, to)
+          move_executed = true
+        end
+        # en-passant move for pawn where he moves 1 step forward and 1 to the side and
+        # takes another piece of the board ..
+        if move_executed == false && en_passant?(from, to)
+          move_piece(from, to)
+          @board.position[[from[0], to[1]]] = nil # set opposing piece position to nil
+          move_executed = true
+        end
+      when :king, :rook
+        # normal case where pawn moves 1 step forward
+        if valid_to?(from, to, color)
+          move_piece(from, to)
+          move_executed = true
+        end
+        # castling move where castle replaces the king and the king moves 2 left or right
+        # ..
       end
     end
 
@@ -206,6 +216,31 @@ class Chess
     end 
 
     return king_in_check
+  end
+
+  # returns true if the move is en-passant, otherwise false
+  def en_passant?(from, to)
+    if from[1] > to[1]
+      # case pawn does en-passant from top to bottom
+      piece_moves_1_in_x_axis = (from[0] + 1 == to[0] || from[0] - 1 == to[0])
+      piece_moves_1_in_y_axis = from[1] - 1 == to[1]
+
+      piece = @board.position[from]
+      enemy_piece = @board.position[[from[0], from[1] - 1]]
+      piece_has_enemy_piece_in_front = (enemy_piece != nil && enemy_piece.color != piece.color)
+
+      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && piece_has_enemy_piece_in_front
+    else
+      # case pawn does en-passant from bottom to top
+      piece_moves_1_in_x_axis = (from[0] + 1 == to[0] || from[0] - 1 == to[0])
+      piece_moves_1_in_y_axis = from[1] + 1 == to[1]
+
+      piece = @board.position[from]
+      enemy_piece = @board.position[[from[0], from[1] + 1]]
+      piece_has_enemy_piece_in_front = (enemy_piece != nil && enemy_piece.color != piece.color)
+
+      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && piece_has_enemy_piece_in_front
+    end
   end
 end
 
