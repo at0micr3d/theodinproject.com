@@ -8,41 +8,41 @@ class Board
     @position = Hash.new
     create_positions
   end
-  
+
   def print_positions
     return  %Q{
-          +---+---+---+---+---+---+---+---+
-        8 | #{print_sqr(@position[[1,8]])} | #{print_sqr(@position[[2,8]])} | #{print_sqr(@position[[3,8]])} | #{print_sqr(@position[[4,8]])} | #{print_sqr(@position[[5,8]])} | #{print_sqr(@position[[6,8]])} | #{print_sqr(@position[[7,8]])} | #{print_sqr(@position[[8,8]])} |
-          +---+---+---+---+---+---+---+---+
-        7 | #{print_sqr(@position[[1,7]])} | #{print_sqr(@position[[2,7]])} | #{print_sqr(@position[[3,7]])} | #{print_sqr(@position[[4,7]])} | #{print_sqr(@position[[5,7]])} | #{print_sqr(@position[[6,7]])} | #{print_sqr(@position[[7,7]])} | #{print_sqr(@position[[8,7]])} |
-          +---+---+---+---+---+---+---+---+
-        6 | #{print_sqr(@position[[1,6]])} | #{print_sqr(@position[[2,6]])} | #{print_sqr(@position[[3,6]])} | #{print_sqr(@position[[4,6]])} | #{print_sqr(@position[[5,6]])} | #{print_sqr(@position[[6,6]])} | #{print_sqr(@position[[7,6]])} | #{print_sqr(@position[[8,6]])} |
-          +---+---+---+---+---+---+---+---+
-        5 | #{print_sqr(@position[[1,5]])} | #{print_sqr(@position[[2,5]])} | #{print_sqr(@position[[3,5]])} | #{print_sqr(@position[[4,5]])} | #{print_sqr(@position[[5,5]])} | #{print_sqr(@position[[6,5]])} | #{print_sqr(@position[[7,5]])} | #{print_sqr(@position[[8,5]])} |
-          +---+---+---+---+---+---+---+---+
-        4 | #{print_sqr(@position[[1,4]])} | #{print_sqr(@position[[2,4]])} | #{print_sqr(@position[[3,4]])} | #{print_sqr(@position[[4,4]])} | #{print_sqr(@position[[5,4]])} | #{print_sqr(@position[[6,4]])} | #{print_sqr(@position[[7,4]])} | #{print_sqr(@position[[8,4]])} |
-          +---+---+---+---+---+---+---+---+
-        3 | #{print_sqr(@position[[1,3]])} | #{print_sqr(@position[[2,3]])} | #{print_sqr(@position[[3,3]])} | #{print_sqr(@position[[4,3]])} | #{print_sqr(@position[[5,3]])} | #{print_sqr(@position[[6,3]])} | #{print_sqr(@position[[7,3]])} | #{print_sqr(@position[[8,3]])} |
-          +---+---+---+---+---+---+---+---+
-        2 | #{print_sqr(@position[[1,2]])} | #{print_sqr(@position[[2,2]])} | #{print_sqr(@position[[3,2]])} | #{print_sqr(@position[[4,2]])} | #{print_sqr(@position[[5,2]])} | #{print_sqr(@position[[6,2]])} | #{print_sqr(@position[[7,2]])} | #{print_sqr(@position[[8,2]])} |
-          +---+---+---+---+---+---+---+---+
-        1 | #{print_sqr(@position[[1,1]])} | #{print_sqr(@position[[2,1]])} | #{print_sqr(@position[[3,1]])} | #{print_sqr(@position[[4,1]])} | #{print_sqr(@position[[5,1]])} | #{print_sqr(@position[[6,1]])} | #{print_sqr(@position[[7,1]])} | #{print_sqr(@position[[8,1]])} |
-          +---+---+---+---+---+---+---+---+
-            a   b   c   d   e   f   g   h
+        +---+---+---+---+---+---+---+---+
+      8 | #{print_sqr(@position[[1,8]])} | #{print_sqr(@position[[2,8]])} | #{print_sqr(@position[[3,8]])} | #{print_sqr(@position[[4,8]])} | #{print_sqr(@position[[5,8]])} | #{print_sqr(@position[[6,8]])} | #{print_sqr(@position[[7,8]])} | #{print_sqr(@position[[8,8]])} |
+        +---+---+---+---+---+---+---+---+
+      7 | #{print_sqr(@position[[1,7]])} | #{print_sqr(@position[[2,7]])} | #{print_sqr(@position[[3,7]])} | #{print_sqr(@position[[4,7]])} | #{print_sqr(@position[[5,7]])} | #{print_sqr(@position[[6,7]])} | #{print_sqr(@position[[7,7]])} | #{print_sqr(@position[[8,7]])} |
+        +---+---+---+---+---+---+---+---+
+      6 | #{print_sqr(@position[[1,6]])} | #{print_sqr(@position[[2,6]])} | #{print_sqr(@position[[3,6]])} | #{print_sqr(@position[[4,6]])} | #{print_sqr(@position[[5,6]])} | #{print_sqr(@position[[6,6]])} | #{print_sqr(@position[[7,6]])} | #{print_sqr(@position[[8,6]])} |
+        +---+---+---+---+---+---+---+---+
+      5 | #{print_sqr(@position[[1,5]])} | #{print_sqr(@position[[2,5]])} | #{print_sqr(@position[[3,5]])} | #{print_sqr(@position[[4,5]])} | #{print_sqr(@position[[5,5]])} | #{print_sqr(@position[[6,5]])} | #{print_sqr(@position[[7,5]])} | #{print_sqr(@position[[8,5]])} |
+        +---+---+---+---+---+---+---+---+
+      4 | #{print_sqr(@position[[1,4]])} | #{print_sqr(@position[[2,4]])} | #{print_sqr(@position[[3,4]])} | #{print_sqr(@position[[4,4]])} | #{print_sqr(@position[[5,4]])} | #{print_sqr(@position[[6,4]])} | #{print_sqr(@position[[7,4]])} | #{print_sqr(@position[[8,4]])} |
+        +---+---+---+---+---+---+---+---+
+      3 | #{print_sqr(@position[[1,3]])} | #{print_sqr(@position[[2,3]])} | #{print_sqr(@position[[3,3]])} | #{print_sqr(@position[[4,3]])} | #{print_sqr(@position[[5,3]])} | #{print_sqr(@position[[6,3]])} | #{print_sqr(@position[[7,3]])} | #{print_sqr(@position[[8,3]])} |
+        +---+---+---+---+---+---+---+---+
+      2 | #{print_sqr(@position[[1,2]])} | #{print_sqr(@position[[2,2]])} | #{print_sqr(@position[[3,2]])} | #{print_sqr(@position[[4,2]])} | #{print_sqr(@position[[5,2]])} | #{print_sqr(@position[[6,2]])} | #{print_sqr(@position[[7,2]])} | #{print_sqr(@position[[8,2]])} |
+        +---+---+---+---+---+---+---+---+
+      1 | #{print_sqr(@position[[1,1]])} | #{print_sqr(@position[[2,1]])} | #{print_sqr(@position[[3,1]])} | #{print_sqr(@position[[4,1]])} | #{print_sqr(@position[[5,1]])} | #{print_sqr(@position[[6,1]])} | #{print_sqr(@position[[7,1]])} | #{print_sqr(@position[[8,1]])} |
+        +---+---+---+---+---+---+---+---+
+          a   b   c   d   e   f   g   h
     }
   end
-  
+
   private
-  
+
 # prints the individual squares on the board. is able to handle both pieces and empty squares. returns a string.
-  def print_sqr(position_value)
-    if position_value != nil
-      return position_value.unicode
-    else
-      return " "
-    end
+def print_sqr(position_value)
+  if position_value != nil
+    return position_value.unicode
+  else
+    return " "
   end
-  
+end
+
   # Creates the chess board with all pieces. pieces are seperate classes. the board is a hash with 1x2 arrays as keys. function returns nothing but populates instance variable @position.
   def create_positions
     # create all 8x8 positions, where [1,1] is downleft and [8,8] is up right also [x,y] where x is horizontal and y is vertical.
@@ -90,7 +90,7 @@ class Chess
     @prev_moves = []
     puts @board.print_positions
   end
-  
+
   #prints winner and congratulations at end of the game
   def print_end_message
     #stub
@@ -105,29 +105,28 @@ class Chess
 
     if valid_from?(from, color) 
       case @board.position[from].type
-      when :knight || :bishop || :queen
+      when :knight, :bishop, :queen
         if valid_to?(from, to, color)
           move_piece(from, to)
           move_executed = true
         end
       when :pawn
-        # normal case where pawn moves 1 step forward
-        if valid_to?(from, to, color)
+        # normal case where pawn moves 1 step forward. pawn can not take another piece that is right in front of it.
+        if valid_to?(from, to, color) && @board.position[to] == nil
           move_piece(from, to)
           move_executed = true
         end
-      # first move for pawn where he can take 2 steps forward
+      # first move for pawn where he can take 2 steps forward .. en-passant
+      # move for pawn where he moves 1 step forward and 1 to the side and
+      # takes another piece of the board ..
+    when :king, :rook
+      # normal case where pawn moves 1 step forward
+      if valid_to?(from, to, color)
+        move_piece(from, to)
+        move_executed = true
+      end
+      # castling move where castle replaces the king and the king moves 2 left or right
       # ..
-      # en-passant move for pawn where he moves 1 step forward and 1 to the side and takes another piece of the board
-      # ..
-      when :king || :rook
-        # normal case where pawn moves 1 step forward
-        if valid_to?(from, to, color)
-          move_piece(from, to)
-          move_executed = true
-        end
-        # castling move where castle replaces the king and the king moves 2 left or right
-        # ..
       end
     end
 
@@ -219,7 +218,7 @@ class Game
     colors = choose_colors
     @players = [Human.new(colors[0].to_sym), Human.new(colors[1].to_sym)].cycle
   end
-  
+
   def start
     while @chess.status == :ongoing
       # get a move from the next player and make it. repeat until its valid. (returns true)
