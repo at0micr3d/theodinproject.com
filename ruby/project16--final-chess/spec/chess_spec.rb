@@ -200,10 +200,11 @@ describe "Chess" do
 
 			it "can move a pawn en-passant" do
 				game.make_move([[1,2], [1,4], :w])
-				game.make_move([[1,7], [1,5], :b])
+				game.make_move([[2,7], [2,5], :b])
+				game.make_move([[2,5], [2,4], :b])
 				game.make_move([[1,4], [2,5], :w])
 				expect(game.board.position[[2,5]].type).to be(:pawn)
-				expect(game.board.position[[1,5]]).to be(nil)
+				expect(game.board.position[[2,4]]).to be(nil)
 				pieces_present(15, 2, 2, 4, 4, 4)
 			end
 
@@ -215,6 +216,22 @@ describe "Chess" do
 				expect(game.board.position[[7,1]].type).to be(:king)
 				expect(game.board.position[[6,1]].type).to be(:rook)
 				pieces_present(16, 2, 2, 4, 4, 4)
+			end
+
+			it "can make a pawn into a queen when it reaches the other side" do
+				game.make_move([[1,2], [1,4], :w])
+				game.make_move([[1,7], [1,5], :b])
+				game.make_move([[4,2], [4,4], :w])
+				game.make_move([[4,1], [4,2], :w])
+				game.make_move([[4,2], [1,5], :w])
+				game.make_move([[1,5], [2,5], :w])
+				game.make_move([[1,8], [1,5], :b])
+				game.make_move([[1,5], [2,5], :b])
+				game.make_move([[1,4], [1,5], :w])
+				game.make_move([[1,5], [1,6], :w])
+				game.make_move([[1,6], [1,7], :w])
+				game.make_move([[1,7], [1,8], :w])
+				expect(game.board.position[[1,8]].type).to be(:queen)
 			end
 		end
 	end

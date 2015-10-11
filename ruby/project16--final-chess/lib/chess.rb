@@ -1,6 +1,7 @@
 require_relative 'pieces'
 require 'pry'
 
+# Board class, where all the visualization of chess and all the board pieces are situated in the position data structure.
 class Board
   attr_accessor :position
   
@@ -55,33 +56,34 @@ class Board
     # fill all pieces:
     # add all pawns
     for i in 1..8
-      @position[[i,2]] = Pawn.new(:w)
-      @position[[i,7]] = Pawn.new(:b)
+      @position[[i,2]] = Pieces::Pawn.new(:w)
+      @position[[i,7]] = Pieces::Pawn.new(:b)
     end
     # add rooks
-    @position[[1,8]] = Rook.new(:b)
-    @position[[1,1]] = Rook.new(:w)
-    @position[[8,8]] = Rook.new(:b)
-    @position[[8,1]] = Rook.new(:w)
+    @position[[1,8]] = Pieces::Rook.new(:b)
+    @position[[1,1]] = Pieces::Rook.new(:w)
+    @position[[8,8]] = Pieces::Rook.new(:b)
+    @position[[8,1]] = Pieces::Rook.new(:w)
     # Add Knights
-    @position[[2,8]] = Knight.new(:b)
-    @position[[2,1]] = Knight.new(:w)
-    @position[[7,8]] = Knight.new(:b)
-    @position[[7,1]] = Knight.new(:w)
+    @position[[2,8]] = Pieces::Knight.new(:b)
+    @position[[2,1]] = Pieces::Knight.new(:w)
+    @position[[7,8]] = Pieces::Knight.new(:b)
+    @position[[7,1]] = Pieces::Knight.new(:w)
     # add bishops
-    @position[[3,8]] = Bishop.new(:b)
-    @position[[3,1]] = Bishop.new(:w)
-    @position[[6,8]] = Bishop.new(:b)
-    @position[[6,1]] = Bishop.new(:w)
+    @position[[3,8]] = Pieces::Bishop.new(:b)
+    @position[[3,1]] = Pieces::Bishop.new(:w)
+    @position[[6,8]] = Pieces::Bishop.new(:b)
+    @position[[6,1]] = Pieces::Bishop.new(:w)
     # add kings
-    @position[[5,8]] = King.new(:b)
-    @position[[5,1]] = King.new(:w)
+    @position[[5,8]] = Pieces::King.new(:b)
+    @position[[5,1]] = Pieces::King.new(:w)
     # add queens
-    @position[[4,8]] = Queen.new(:b)
-    @position[[4,1]] = Queen.new(:w)
+    @position[[4,8]] = Pieces::Queen.new(:b)
+    @position[[4,1]] = Pieces::Queen.new(:w)
   end
 end
 
+# Chess class, where all the game logic is implemented.
 class Chess
   attr_reader :status, :board
   
@@ -130,7 +132,7 @@ class Chess
         if move_executed == false && en_passant?(from, to)
           move_piece(from, to)
           piece.nr_moves =+ 1
-          @board.position[[from[0], to[1]]] = nil # set opposing piece position to nil
+          @board.position[[to[0], from[1]]] = nil # set opposing piece position to nil
           move_executed = true
         end
       when :king
@@ -174,7 +176,7 @@ class Chess
     end
   end
 
-  #returns all possible moves for a given player in the form of an array
+  #returns an array of all possible moves for a given player (color)
   def possible_moves(color)
     #stub
   end
@@ -218,24 +220,42 @@ class Chess
   def en_passant?(from, to)
     if from[1] > to[1]
       # case pawn does en-passant from top to bottom
-      piece_moves_1_in_x_axis = (from[0] + 1 == to[0] || from[0] - 1 == to[0])
-      piece_moves_1_in_y_axis = from[1] - 1 == to[1]
-
       piece = @board.position[from]
-      enemy_piece = @board.position[[from[0], from[1] - 1]]
-      piece_has_enemy_piece_in_front = (enemy_piece != nil && enemy_piece.color != piece.color)
+      enemy_piece_left = @board.position[[from[0] -1, from[1]]]
+      enemy_piece_right = @board.position[[from[0] +1, from[1]]]
 
-      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && piece_has_enemy_piece_in_front
+      piece_has_enemy_piece_left = (enemy_piece_left != nil && enemy_piece_left.color != piece.color)
+      piece_has_enemy_piece_rigth = (enemy_piece_right != nil && enemy_piece_right.color != piece.color)
+      if piece_has_enemy_piece_left
+        piece_moves_1_in_x_axis = from[0] - 1 == to[0]
+        piece_moves_1_in_y_axis = from[1] - 1 == to[1]
+      end
+
+      if piece_has_enemy_piece_rigth
+        piece_moves_1_in_x_axis = from[0] + 1 == to[0]
+        piece_moves_1_in_y_axis = from[1] - 1 == to[1]
+      end
+
+      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && (piece_has_enemy_piece_left || piece_has_enemy_piece_rigth)
     else
       # case pawn does en-passant from bottom to top
-      piece_moves_1_in_x_axis = (from[0] + 1 == to[0] || from[0] - 1 == to[0])
-      piece_moves_1_in_y_axis = from[1] + 1 == to[1]
-
       piece = @board.position[from]
-      enemy_piece = @board.position[[from[0], from[1] + 1]]
-      piece_has_enemy_piece_in_front = (enemy_piece != nil && enemy_piece.color != piece.color)
+      enemy_piece_left = @board.position[[from[0] -1, from[1]]]
+      enemy_piece_right = @board.position[[from[0] +1, from[1]]]
 
-      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && piece_has_enemy_piece_in_front
+      piece_has_enemy_piece_left = (enemy_piece_left != nil && enemy_piece_left.color != piece.color)
+      piece_has_enemy_piece_rigth = (enemy_piece_right != nil && enemy_piece_right.color != piece.color)
+      if piece_has_enemy_piece_left
+        piece_moves_1_in_x_axis = from[0] - 1 == to[0]
+        piece_moves_1_in_y_axis = from[1] + 1 == to[1]
+      end
+
+      if piece_has_enemy_piece_rigth
+        piece_moves_1_in_x_axis = from[0] + 1 == to[0]
+        piece_moves_1_in_y_axis = from[1] + 1 == to[1]
+      end
+
+      return true if piece_moves_1_in_x_axis && piece_moves_1_in_y_axis && (piece_has_enemy_piece_left || piece_has_enemy_piece_rigth)
     end
   end
 
@@ -325,9 +345,9 @@ class Chess
     return piece_capturable
   end
 
-
 end
 
+# overarching class for the game. uses start function where input is gathered and given to the chess class.
 class Game
   def initialize
     puts "This is the ancient game of chess. Many have gone before and many shall go after. But this is your turn!"
@@ -369,6 +389,7 @@ class AI
   # stub
 end
 
+# Human player who plays in the class 'game'. interaction vehicle for the user.
 class Human
   def initialize(color)
     @color = color
