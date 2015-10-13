@@ -235,6 +235,51 @@ describe "Chess" do
 			end
 		end
 	end
+
+	describe "#squares_between" do
+
+		it "works with 'to' to the right and top of from" do
+			expect(game.send(:squares_between, [3,3], [5,5])).to eql([[4,4]])
+		end
+
+		it "works with 'to' to the left and bottom of from" do
+			expect(game.send(:squares_between, [3,3], [1,1])).to eql([[2,2]])
+		end
+
+		it "works with 'to' to the top of from" do
+			expect(game.send(:squares_between, [3,3], [3,7])) =~ ([[3,4], [3,5], [3,6]])
+		end
+
+		it "works with 'to' to the bottom of from" do
+			expect(game.send(:squares_between, [3,3], [3,1])) =~ ([[3,2]])
+		end
+
+		it "works with 'to' to the left of from" do
+			expect(game.send(:squares_between, [3,3], [1,3])) =~ ([[2,3]])
+		end
+
+		it "works with 'to' to the right of from" do
+			expect(game.send(:squares_between, [3,3], [6,3])) =~ ([[4,3], [5,3]])
+		end
+
+		it "works with 'to' to the right and bottom of from" do
+			expect(game.send(:squares_between, [3,3], [5,1])) =~ ([[4,2]])
+		end
+
+		it "works with 'to' to the left and top of from" do
+			expect(game.send(:squares_between, [3,3], [1,5])) =~ ([[2,4]])
+		end
+
+		it "works with no squares between 'to' and 'from'." do
+			expect(game.send(:squares_between, [3,3], [4,4])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [3,4])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [4,3])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [2,3])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [2,2])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [3,2])) =~ ([])
+			expect(game.send(:squares_between, [3,3], [4,2])) =~ ([])
+		end
+	end
 end
 
 

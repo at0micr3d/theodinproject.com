@@ -1,9 +1,11 @@
 #Todo
 
 ##List
--pawn becomes queen on first row enemy
 -check function for not moving over other pieces
+	implement in valid_to?: (done)
+	-also change in capturable (to do)
+	-same code in castling? (to do) 
 -detect checkmate
 -saving and loading
 -AI (for inspiration -> http://jeffbradberry.com/posts/2015/09/intro-to-monte-carlo-tree-search/)
--network play
+-network 

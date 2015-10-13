@@ -135,6 +135,12 @@ class Chess
           @board.position[[to[0], from[1]]] = nil # set opposing piece position to nil
           move_executed = true
         end
+        # promotes a pawn to a queeen when it reaches the opposing side (row 1 or 8)
+        if promote?(to, color)
+          move_piece(from, to)
+          @board.position[to] = Pieces::Queen.new(color) # set piece to a queen
+          move_executed = true
+        end
       when :king
         # normal case where king or rook moves 1 step
         if valid_to?(from, to, color)
@@ -168,7 +174,8 @@ class Chess
     # make_move function prints board and returns true if the move was valid. gives error message and returns false if not.
     if move_executed == true
       puts @board.print_positions
-      check?
+      game_state?
+      puts "Watch out: game is in check state.." if @status == :check
       return true
     else
       puts "That move is not valid. Please try again."
@@ -198,22 +205,49 @@ class Chess
     end
   end
 
-  #returns true if the to location is valid. i.e. inside chess board, not on own piece and within standard piece possible moves ability. beware: not taking into account the special moves like en-passant, etc
+  #returns true if the to location is valid. i.e. inside chess board, not on own piece, within standard piece possible moves ability and there are no pieces between from and to (with exception for knight). beware: not taking into account the special moves like en-passant, etc
   def valid_to?(from, to, color)
     if valid_from?(from, color)
       on_board = to[0] > 0 && to[0] < 9 && to[1] > 0 && to[1] < 9
+      
       if @board.position[to] != nil #if position filled it should not be the same color
         to_not_same_color = @board.position[to].color != color
       else
         to_not_same_color = true
       end
+      
       within_move_ability = @board.position[from].possible_moves.any? { |dir| from[0] + dir[0] == to[0] && from[1] + dir[1] == to[1] }
-      if on_board && to_not_same_color && within_move_ability
+      
+      no_pieces_between_from_and_to = false
+      no_pieces_between_from_and_to = squares_between(from, to).all? { |pos| @board.position[pos] == nil }
+      no_pieces_between_from_and_to = true if @board.position[from].type == :knight #exception for knight, who can jump over units.
+
+      if on_board && to_not_same_color && within_move_ability && no_pieces_between_from_and_to
         return true
       else
         return false
       end
     end
+  end
+
+  # takes from and to position and returns the positions between those two positions in the form of an array.
+  def squares_between(from, to)
+    squares = []
+    dx =  to[0] - from[0]
+    dy = to[1] - from[1]
+    x = 0
+    y = 0
+    for i in 1..[dx.abs, dy.abs].max 
+      x = dx + i if dx < 0
+      y = dy + i if dy < 0
+      x = dx - i if dx > 0
+      y = dy - i if dy > 0
+      x = 0 if dx == 0
+      y = 0 if dy == 0
+      squares << [from[0] + x, from[1] + y]
+    end
+    squares = squares.delete_if { |pos| pos == from || pos == to }
+    return squares
   end
 
   # returns true if the move is en-passant, otherwise false
@@ -259,7 +293,7 @@ class Chess
     end
   end
 
-  # checks if castling is possible. takes the kings from position and the position the king will be after the castling. returns true if so, otherwise false
+  # checks if castling is possible. takes as arguments the kings from position and the to position the king will be after the castling. returns true if so, otherwise false
   def castling?(from, to)
     king = @board.position[from]
     # rules:
@@ -318,7 +352,7 @@ class Chess
   end
 
   # returns true if the game is in a check state. i.e. if one of the two players can take the king of the other player in the next move
-  def check?
+  def game_state?
     #find the kings positions
     pos_black_king = []
     pos_white_king = []
@@ -330,7 +364,11 @@ class Chess
     end 
 
     # are there any pieces on the board that can take the other colors king?
-    return capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
+    if capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
+      @status = :check
+    else
+      @status = :ongoing
+    end
   end
 
   # checks if the given position can be reached from an enemy piece. (not the color that is given) returns true if so, otherwise false
@@ -338,11 +376,25 @@ class Chess
     piece_capturable = false
     @board.position.each do |cell, piece|
       if piece != nil && piece.color != color
-          piece_capturable = piece.possible_moves.any? { |dir| cell[0] + dir[0] == position[0] && cell[1] + dir[1] == position[1] }
+          piece_capturable = piece.possible_moves.any? do |dir| 
+            cell[0] + dir[0] == position[0] && cell[1] + dir[1] == position[1] 
+          end
           break if piece_capturable
       end
     end 
     return piece_capturable
+  end
+
+  # checks if the first row of the enemy is reached
+  def promote?(to, color)
+    promote = false
+    if to[1].to_i == 8 && color == :w
+      promote = true
+    end
+    if to[1].to_i == 1 && color == :b
+      promote = true
+    end
+    return promote
   end
 
 end
@@ -360,7 +412,7 @@ class Game
 
   # start the game and loop until game state is no longer ongoing
   def start
-    while @chess.status == :ongoing
+    while @chess.status == :ongoing || @chess.status == :check
       # get a move from the next player and make it. repeat until its valid. (returns true)
       current_player = @players.next
       until @chess.make_move(current_player.get_move)
