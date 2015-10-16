@@ -338,14 +338,7 @@ class Chess
 
     #   All squares between the rook and king before the castling move are empty.
     pos_in_range_is_empty = true
-    move_range_start = [from[0], to[0]].min
-    move_range_end = move_range_start + (from[0] - to[0]).abs
-    y_val = from[1]
-    for i in (move_range_start + 1)..move_range_end
-      if @board.position[[i, y_val]] != nil
-        pos_in_range_is_empty = false
-      end
-    end
+    pos_in_range_is_empty = squares_between(from, to).all? { |square| @board.position[square] == nil }
 
     # if all conditions are met return true
     return king_not_moved_yet && rook_not_moved_yet && !pos_in_range_is_capturable && pos_in_range_is_empty
@@ -371,17 +364,18 @@ class Chess
     end
   end
 
-  # checks if the given position can be reached from an enemy piece. (not the color that is given) returns true if so, otherwise false
+  # checks if the given position can be reached from an enemy piece. parameters are the position and color of the friendly piece. returns true if can be reached, otherwise false
   def capturable?(position, color)
     piece_capturable = false
-    @board.position.each do |cell, piece|
+    @board.position.each do |from, piece|
       if piece != nil && piece.color != color
           piece_capturable = piece.possible_moves.any? do |dir| 
-            cell[0] + dir[0] == position[0] && cell[1] + dir[1] == position[1] 
+            from[0] + dir[0] == position[0] && from[1] + dir[1] == position[1] && (squares_between(from, position).all? { |square| @board.position[square] == nil } || @board.position[from].type == :knight )  #exception for knight who can move over other pieces
           end
           break if piece_capturable
       end
     end 
+
     return piece_capturable
   end
 
