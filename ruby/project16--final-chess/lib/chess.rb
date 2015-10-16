@@ -121,6 +121,12 @@ class Chess
           piece.nr_moves =+ 1
           move_executed = true
         end
+        # pawn takes another piece to the left or right of him and 1 forward
+        if move_executed == false && pawn_takes_enemy_piece?(from, to)
+          move_piece(from, to)
+          piece.nr_moves =+ 1          
+          move_executed = true
+        end
         # first move for pawn where he can take 2 steps forward
         if move_executed == false && piece.nr_moves == 0 && (from[1] + 2 == to[1] || from[1] - 2 == to[1])
           move_piece(from, to)
@@ -293,6 +299,20 @@ class Chess
     end
   end
 
+  def pawn_takes_enemy_piece?(from, to)
+    piece = @board.position[from]
+    pawn_takes_enemy_piece = (
+    # piece should go up for white and down for black
+    (from[1] + 1 == to[1] && piece.color == :w) || 
+    (from[1] - 1 == to[1] && piece.color == :b)
+    ) && 
+    # piece should go left or right from current pos 
+    (from[0] + 1 == to[0] || from[0] - 1 == to[0]) &&
+    # piece should take an enemy piece
+    (@board.position[to] != nil && @board.position[to].color != piece.color)
+    return pawn_takes_enemy_piece
+  end
+
   # checks if castling is possible. takes as arguments the kings from position and the to position the king will be after the castling. returns true if so, otherwise false
   def castling?(from, to)
     king = @board.position[from]
@@ -344,23 +364,32 @@ class Chess
     return king_not_moved_yet && rook_not_moved_yet && !pos_in_range_is_capturable && pos_in_range_is_empty
   end
 
-  # returns true if the game is in a check state. i.e. if one of the two players can take the king of the other player in the next move
-  def game_state?
-    #find the kings positions
+  # looks at the game state and returns true if the game is in check state
+  def check?
+    # always start with assuming status ongoing.
+    in_check_state = false
+
+    # find the kings positions
     pos_black_king = []
     pos_white_king = []
     @board.position.each do |cell, piece|
-      if piece != nil
+      if piece != nil 
         pos_black_king = cell if piece.color == :b && piece.type == :king
         pos_white_king = cell if piece.color == :w && piece.type == :king
       end
     end 
+    in_check_state = true if capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
+    
+    return in_check_state
+  end
 
-    # are there any pieces on the board that can take the other colors king?
-    if capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
-      @status = :check
-    else
-      @status = :ongoing
+  # looks at the game state and returns true if the game is in checkmate state. otherwise false
+  # receives color parameter in order to know which player has made the last move.
+  def checkmate?(color)
+    
+    if check? == true
+      # if the game is in check status
+      
     end
   end
 
@@ -372,6 +401,8 @@ class Chess
           piece_capturable = piece.possible_moves.any? do |dir| 
             from[0] + dir[0] == position[0] && from[1] + dir[1] == position[1] && (squares_between(from, position).all? { |square| @board.position[square] == nil } || @board.position[from].type == :knight )  #exception for knight who can move over other pieces
           end
+          # exception for pawn who takes other pieces in a special move instead of regular moves
+          piece_capturable = pawn_takes_enemy_piece?(from, position) if piece.type == :pawn
           break if piece_capturable
       end
     end 

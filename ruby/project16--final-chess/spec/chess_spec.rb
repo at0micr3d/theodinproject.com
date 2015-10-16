@@ -120,6 +120,15 @@ describe "Chess" do
 				pieces_present(16, 2, 2, 4, 4, 4)
 			end
 
+			it "can take an enemy piece if it is to the left or right and one forward of him" do
+				game.make_move([[1,2], [1,4], :w])
+				game.make_move([[2,7], [2,5], :b])
+				game.make_move([[1,4], [2,5], :w])
+				expect(game.board.position[[2,5]].type).to be(:pawn)
+				expect(game.board.position[[2,5]].color).to be(:w)
+				pieces_present(15, 2, 2, 4, 4, 4)
+			end
+
 			it "can move a knight in all possible directions" do
 				game.make_move([[2,1], [1,3], :w])
 				game.make_move([[1,3], [3,4], :w])
