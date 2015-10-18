@@ -85,13 +85,14 @@ end
 
 # Chess class, where all the game logic is implemented.
 class Chess
-  attr_reader :status, :board
+  attr_reader :status, :board, :prev_moves
   
-  def initialize
+  def initialize(prev_moves = [], printout = false, simulated_game = false)
     @board = Board.new
-    @status = :ongoing
-    @prev_moves = []
-    puts @board.print_positions
+    @status = :ongoing # board status, set standard to ongoing.
+    @prev_moves = prev_moves #stores all previous moves of a game. needs to be an argument at creation of object chess, so that the game can be brought to a certain state during simulation
+    @printout = printout #used for debugging. print out the board after a move or not.
+    @simulated_game = simulated_game #for simulated games the chess class needs to behave differently.
   end
 
   #prints winner and congratulations at end of the game
@@ -179,12 +180,13 @@ class Chess
 
     # make_move function prints board and returns true if the move was valid. gives error message and returns false if not.
     if move_executed == true
-      puts @board.print_positions
-      game_state?
-      puts "Watch out: game is in check state.." if @status == :check
+      print_board if @printout == true
+      @prev_moves << arg #store the input arguments in the previous moves variable.
+      @status = :ongoing #start with the game is ongoing, so that it will be ongoing when it comes from a status of check
+      @status = :check if check?
+      @status = :checkmate if @simulated_game == false && checkmate?(color) #don't do checkmate in a simulated game or you get an endless loop.
       return true
     else
-      puts "That move is not valid. Please try again."
       return false
     end
   end
@@ -192,6 +194,35 @@ class Chess
   #returns an array of all possible moves for a given player (color)
   def possible_moves(color)
     #stub
+  end
+
+  # prints out the board to standard out
+  def print_board
+    puts @board.print_positions
+  end
+
+  # looks at the game state and returns true if the game is in check state
+  def check?
+    # always start with assuming status ongoing.
+    in_check_state = false
+
+    # find the kings positions
+    pos_black_king = []
+    pos_white_king = []
+    @board.position.each do |cell, piece|
+      if piece != nil 
+        pos_black_king = cell if piece.color == :b && piece.type == :king
+        pos_white_king = cell if piece.color == :w && piece.type == :king
+      end
+    end 
+    in_check_state = true if capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
+    
+    return in_check_state
+  end
+
+  # specific clone method to ensure deep cloning of the object with a reference to a new copy of the @prev_moves array instead of the same
+  def clone
+    Chess.new(@prev_moves.clone)
   end
 
   private
@@ -299,6 +330,8 @@ class Chess
     end
   end
 
+  # returns true if the move is valid for a pawn where he takes another piece
+  # parameters are from and to position in the form of [x,y]
   def pawn_takes_enemy_piece?(from, to)
     piece = @board.position[from]
     pawn_takes_enemy_piece = (
@@ -321,7 +354,7 @@ class Chess
     king_not_moved_yet = king.nr_moves == 0
 
     # The rook that makes the castling move has not yet moved in the game. The King and rook must occupy the same rank (or row).
-    if from[1] > 1
+    if from[1] == 8
       # black is castling
       if to[0] > 5
         # right rook is used for castling
@@ -330,7 +363,7 @@ class Chess
         # left rook is used for castling
         rook_not_moved_yet = @board.position[[1,8]].nr_moves == 0
       end
-    else
+    elsif from[1] == 1
       # white is castling
       if to[0] > 5
         # right rook is used for castling
@@ -364,32 +397,65 @@ class Chess
     return king_not_moved_yet && rook_not_moved_yet && !pos_in_range_is_capturable && pos_in_range_is_empty
   end
 
-  # looks at the game state and returns true if the game is in check state
-  def check?
-    # always start with assuming status ongoing.
-    in_check_state = false
-
-    # find the kings positions
-    pos_black_king = []
-    pos_white_king = []
-    @board.position.each do |cell, piece|
-      if piece != nil 
-        pos_black_king = cell if piece.color == :b && piece.type == :king
-        pos_white_king = cell if piece.color == :w && piece.type == :king
-      end
-    end 
-    in_check_state = true if capturable?(pos_black_king, :b) || capturable?(pos_white_king, :w)
-    
-    return in_check_state
-  end
-
   # looks at the game state and returns true if the game is in checkmate state. otherwise false
   # receives color parameter in order to know which player has made the last move.
   def checkmate?(color)
-    
+
+    # if the game is in check status
     if check? == true
-      # if the game is in check status
-      
+      # general: for each piece try all their valid moves in a simulated game and see if the game is then still in checkmate state
+      sim_game = Chess.new([], printout = false, simulated_game = true)
+      prev_moves = @prev_moves.clone #chess board status is not cloned so needs to be fast forwarded
+      until prev_moves.empty?
+        sim_game.make_move(prev_moves.shift)
+      end
+
+      checkmate = true
+      @board.position.each do |pos, piece|
+        if piece != nil && piece.color != color
+          piece.possible_moves.each do |dir|
+            # make tmp game and fast forward the simulated game to the current game's state
+            sim_game = Chess.new([], printout = false, simulated_game = true)
+            prev_moves = @prev_moves.clone 
+            until prev_moves.empty?
+              sim_game.make_move(prev_moves.shift)
+            end
+
+            # make the move for a given piece
+            from_pos = pos
+            to_pos = [pos[0] + dir[0], pos[1] + dir[1]]
+            sim_game.make_move([from_pos, to_pos, piece.color])
+            
+            # see if the game is still in check status if not than there is a move the player can make to get out of check status.
+            checkmate = false if sim_game.status != :check
+            sim_game = nil
+          end
+          # exception for a pawn where the move is not part of possible moves but a special move of taking another piece
+          if piece.type == :pawn
+            piece.attack_moves.each do |dir|
+              # make tmp game and fast forward the simulated game to the current game's state
+              sim_game = Chess.new([], printout = false, simulated_game = true)
+              prev_moves = @prev_moves.clone 
+              until prev_moves.empty?
+                sim_game.make_move(prev_moves.shift)
+              end
+
+              # make the move for a given piece
+              from_pos = pos
+              to_pos = [pos[0] + dir[0], pos[1] + dir[1]]
+              sim_game.make_move([from_pos, to_pos, piece.color])
+
+              binding.pry if to_pos == [8,7]
+              # see if the game is still in check status if not than there is a move the player can make to get out of check status.
+              checkmate = false if sim_game.status != :check
+              sim_game = nil
+            end 
+          end
+
+        end
+        return checkmate if checkmate == false # don't finish 
+      end
+      return checkmate
     end
   end
 
@@ -421,7 +487,6 @@ class Chess
     end
     return promote
   end
-
 end
 
 # overarching class for the game. uses start function where input is gathered and given to the chess class.
@@ -437,11 +502,16 @@ class Game
 
   # start the game and loop until game state is no longer ongoing
   def start
+    @chess.print_board #print start positions
     while @chess.status == :ongoing || @chess.status == :check
+      puts "Watch out: game is in check state.." if @status == :check
+
       # get a move from the next player and make it. repeat until its valid. (returns true)
       current_player = @players.next
       until @chess.make_move(current_player.get_move)
+        puts "That move is not valid. Please try again."
       end
+      @chess.print_board
     end
     @chess.print_end_message
   end

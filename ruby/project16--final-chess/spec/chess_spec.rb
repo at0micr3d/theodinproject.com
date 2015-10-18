@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 # silence the to be tested program. ie no output to stderr or stdout. 
-# RSpec.configure do |config|
-#    original_stderr = $stderr
-#    original_stdout = $stdout
-#    config.before(:all) do
-#    # Redirect stderr and stdout
-#    $stderr = File.open(File::NULL, "w")
-#    $stdout = File.open(File::NULL, "w")
-#    end
-#    config.after(:all) do
-#       $stderr = original_stderr
-#       $stdout = original_stdout
-#    end
-# end
+RSpec.configure do |config|
+   original_stderr = $stderr
+   original_stdout = $stdout
+   config.before(:all) do
+   # Redirect stderr and stdout
+   $stderr = File.open(File::NULL, "w")
+   $stdout = File.open(File::NULL, "w")
+   end
+   config.after(:all) do
+      $stderr = original_stderr
+      $stdout = original_stdout
+   end
+end
 
 describe "Board" do   let(:board) { Board.new }
 
@@ -69,7 +69,7 @@ describe "Board" do   let(:board) { Board.new }
 end
 
 describe "Chess" do
-	let(:game) { Chess.new }
+	let(:game) { Chess.new([], printout = true, simulated_game = false) }
 
 	# test if all chess pieces that should be on the board are printed out to the user
 	def pieces_present(nr_pawn, nr_king, nr_queen, nr_rook, nr_bishop, nr_knight)
@@ -95,7 +95,7 @@ describe "Chess" do
 	describe "#make_move" do
 		context "for normal chess moves" do
 			it "can move a pawn 1 square" do
-				args = [1,2], [1,3], :w
+				args = [[1,2], [1,3], :w]
 				game.make_move(args)
 				expect(game.board.position[[1,3]].type).to be(:pawn)
 				expect(game.board.position[[1,2]]).to be(nil)
@@ -118,15 +118,6 @@ describe "Chess" do
 				expect(game.board.position[[1,6]].type).to be(:pawn)
 				expect(game.board.position[[1,7]].color).to be(:b)
 				pieces_present(16, 2, 2, 4, 4, 4)
-			end
-
-			it "can take an enemy piece if it is to the left or right and one forward of him" do
-				game.make_move([[1,2], [1,4], :w])
-				game.make_move([[2,7], [2,5], :b])
-				game.make_move([[1,4], [2,5], :w])
-				expect(game.board.position[[2,5]].type).to be(:pawn)
-				expect(game.board.position[[2,5]].color).to be(:w)
-				pieces_present(15, 2, 2, 4, 4, 4)
 			end
 
 			it "can move a knight in all possible directions" do
@@ -217,6 +208,15 @@ describe "Chess" do
 				pieces_present(15, 2, 2, 4, 4, 4)
 			end
 
+			it "can take an enemy piece if it is to the left or right and one forward of him" do
+				game.make_move([[1,2], [1,4], :w])
+				game.make_move([[2,7], [2,5], :b])
+				game.make_move([[1,4], [2,5], :w])
+				expect(game.board.position[[2,5]].type).to be(:pawn)
+				expect(game.board.position[[2,5]].color).to be(:w)
+				pieces_present(15, 2, 2, 4, 4, 4)
+			end
+
 			it "can switch a king and rook by castling" do
 				game.make_move([[5,2], [5,4], :w])
 				game.make_move([[6,1], [3,4], :w])
@@ -287,6 +287,72 @@ describe "Chess" do
 			expect(game.send(:squares_between, [3,3], [2,2])) =~ ([])
 			expect(game.send(:squares_between, [3,3], [3,2])) =~ ([])
 			expect(game.send(:squares_between, [3,3], [4,2])) =~ ([])
+		end
+	end
+
+	describe "#check?" do
+		context "when game is in check state" do
+			it "and it is the white king" do
+				game.make_move([[5,2], [5,3], :w])
+				game.make_move([[5,3], [5,4], :w])
+				game.make_move([[5,4], [5,5], :w])
+				game.make_move([[5,5], [5,6], :w])
+				game.make_move([[4,7], [5,6], :b])
+			   #kings moves
+			   game.make_move([[5,1], [5,2], :w])
+			   game.make_move([[5,2], [5,3], :w])
+			   game.make_move([[5,3], [6,3], :w])
+			   game.make_move([[6,3], [6,4], :w])
+
+			   game.make_move([[5,6], [5,5], :b])
+			   expect(game.status).to be(:check)
+			end
+
+			it "and it is the black king" do
+				game.make_move([[4,7], [4,5], :b])
+				game.make_move([[3,2], [3,4], :w])
+				game.make_move([[3,4], [3,5], :w])
+				game.make_move([[4,1], [1,4], :w])
+
+			   expect(game.status).to be(:check)
+			end
+		end
+		
+	end
+
+	describe "#checkmate?" do
+		context "when game is in checkmate state" do
+			it "and black king can't move anywhere" do
+				game.make_move([[5,2], [5,4], :w])
+				game.make_move([[8,2], [8,4], :w])
+				game.make_move([[8,1], [8,3], :w])
+				game.make_move([[6,7], [6,5], :b])
+				game.make_move([[7,7], [7,5], :b])
+				game.make_move([[4,1], [8,5], :w])
+				expect(game.status).to be(:checkmate)
+			end
+		end
+
+		context "when game is not in checkmate state" do
+			it "and black king can be saved by pawn sacrificing itself" do
+				game.make_move([[5,2], [5,4], :w])
+				game.make_move([[8,2], [8,4], :w])
+				game.make_move([[8,1], [8,3], :w])
+				game.make_move([[6,7], [6,5], :b])
+				game.make_move([[4,1], [8,5], :w])
+				expect(game.status).to be(:check)
+			end
+
+			it "and black king can be saved by pawn taking the queen" do
+				game.make_move([[5,2], [5,4], :w])
+				game.make_move([[8,2], [8,4], :w])
+				game.make_move([[8,1], [8,3], :w])
+				game.make_move([[6,7], [6,5], :b])
+				game.make_move([[4,1], [8,5], :w])
+				game.make_move([[7,7], [7,6], :b])
+				game.make_move([[8,5], [7,6], :w])
+				expect(game.status).to be(:check)
+			end
 		end
 	end
 end

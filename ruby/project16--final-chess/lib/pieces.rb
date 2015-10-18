@@ -28,16 +28,20 @@ module Pieces
 
   # pawn piece in chess
   class Pawn < Piece  
+    attr_reader :attack_moves
     def initialize(color)
       super(color)
       @type = :pawn
       case @color
       when :w
         @unicode = "\u2659"
+        @possible_moves = [[0,1]]
+        @attack_moves = [[1,1], [-1,1]]
       when :b
         @unicode = "\u265F"
+        @possible_moves = [[0,-1]]
+        @attack_moves = [[1,-1], [-1,-1]]
       end
-      @possible_moves = [[0,1],[0,-1]]
     end
   end
 
