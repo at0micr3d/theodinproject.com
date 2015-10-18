@@ -1,5 +1,6 @@
 require_relative 'pieces'
 require 'pry'
+require 'YAML'
 
 # Board class, where all the visualization of chess and all the board pieces are situated in the position data structure.
 class Board
@@ -85,7 +86,7 @@ end
 
 # Chess class, where all the game logic is implemented.
 class Chess
-  attr_reader :status, :board, :prev_moves
+  attr_reader :status, :board
   
   def initialize(prev_moves = [], printout = false, simulated_game = false)
     @board = Board.new
@@ -495,23 +496,41 @@ class Game
     puts "This is the ancient game of chess. Many have gone before and many shall go after. But this is your turn!"
     puts ""
     @chess = Chess.new
-
     colors = choose_colors
-    @players = [Human.new(colors[0].to_sym), Human.new(colors[1].to_sym)].cycle
+    @players ||= [Human.new(colors[0].to_sym), Human.new(colors[1].to_sym)]
+    @current_player ||= @players[0]
   end
 
   # start the game and loop until game state is no longer ongoing
   def start
+    
     @chess.print_board #print start positions
     while @chess.status == :ongoing || @chess.status == :check
       puts "Watch out: game is in check state.." if @status == :check
 
-      # get a move from the next player and make it. repeat until its valid. (returns true)
-      current_player = @players.next
-      until @chess.make_move(current_player.get_move)
-        puts "That move is not valid. Please try again."
+      # get a response from the next player and either save, load or make the move. repeat the move until its valid. (returns true)
+      
+      puts ""
+      puts "You can save the game by typing 'save'."
+      puts ""
+      puts "Please make a move player #{@current_player.color.to_s}. (type the from location followed by the to location, divided by a space. example: 'a2 a3')"
+      
+      player_response = gets.chomp
+      until player_response.downcase.to_s.scan(/\w+/).length == 2 || player_response == 'save'
+        puts "That move is not valid. Please try again" if player_response.downcase.to_s.scan(/\w+/).length != 2
+        player_response = gets.chomp
       end
+
+      Storage.new.save_game(self) if player_response == 'save'
+
+      until @chess.make_move(@current_player.get_move(player_response))
+        puts "That move is not valid. Please try again."
+        player_response = gets.chomp.downcase.to_s
+      end
+
       @chess.print_board
+
+      switch_player
     end
     @chess.print_end_message
   end
@@ -530,6 +549,15 @@ class Game
     puts "That makes player 2: #{player2_color}."
     return [player1_color, player2_color]
   end
+
+  def switch_player
+    if @current_player == @players[0]
+      i = 1
+    else
+      i = 0
+    end
+    @current_player = @players[i]
+  end
 end
 
 class AI
@@ -538,16 +566,17 @@ end
 
 # Human player who plays in the class 'game'. interaction vehicle for the user.
 class Human
+  attr_reader :color
   def initialize(color)
     @color = color
   end
+
   # get a move from the player. returns an array in the form of [from_position, to_position, player_color]
-  def get_move
-    puts "Please make a move player #{@color.to_s}. (type the from location followed by the to location, divided by a space. example: 'a2 a3')"
-    move = []
+  def get_move(move)
+    move = move.scan(/\w+/)
     until move.length == 2
+      puts "That move is not valid. Please try again" if move.length != 2
       move = gets.chomp.downcase.to_s.scan(/\w+/)
-      puts "That's not a valid option. Please try again" if move.length != 2
     end
     move = parse(move)
     return [move[0], move[1], @color.to_sym]
@@ -567,3 +596,25 @@ class Human
     # 
   end
 end
+
+class Storage
+  def initialize
+    @save_path = "saves/save"
+  end
+
+  def load_game
+    f = File.open(@save_path).read#lines.join()
+    YAML::load(f) 
+  end
+
+  def save_game(game)
+    save_yaml = YAML::dump(game)
+    f = File.open(@save_path, 'w') do |f|
+      f.write save_yaml
+    end
+    puts "Game saved!"
+  end
+end
+
+
+
