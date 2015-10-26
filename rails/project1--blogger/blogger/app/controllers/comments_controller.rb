@@ -1,6 +1,8 @@
 class CommentsController < ApplicationController
 	include CommentsHelper
 
+	before_filter :require_login, except: [:create]
+
 	# def index
 	# 	@comment = Comment.all
 	# end
