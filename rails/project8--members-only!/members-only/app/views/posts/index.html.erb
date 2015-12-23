@@ -1,0 +1,14 @@
+<h1>All Posts</h1>
+<% if @posts.any? %>
+  <ul>
+	  <% @posts.each do |p| %>
+	  <li><%= p.title + ' | ' + p.content %>
+	  	<% if logged_in? %>
+	  	  <%= " -> " + p.user.name %>
+	    <% end %>
+  	</li>
+	  <% end %>
+  </ul>
+<% else %>
+	<div>There are no posts at this moment</div>
+<% end %>

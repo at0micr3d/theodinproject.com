@@ -1,0 +1,17 @@
+<h1>New Post</h1>
+<%= form_for @post, url: {action: "create" } do |f| %>
+	<% if @post.errors.any? %>
+	  <div>The form contains <%= pluralize(@post.errors.count, "error") %></div>
+	  <ul>
+	  	<% @post.errors.full_messages.each do |msg| %>
+	  	  <li><%= msg %></li>
+  	  <% end %>
+  	</ul>
+	<% end %>
+
+	<p><%= f.label :title %>
+	<%= f.text_field :title %></p>
+	<p><%= f.label :content %>
+	<%= f.text_field :content %></p>
+	<%= f.submit "Post!" %>
+<% end %>
