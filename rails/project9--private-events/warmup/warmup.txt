@@ -1,0 +1,47 @@
+Lay out the data architecture you'd need to implement to build the following scenarios:
+
+---------
+1. A site for pet-sitting (watching someone's pet while they're gone). People can babysit for multiple pets and pets can have multiple petsitters.
+
+User
+	has_many :pets, :foreign_key => "owner_id", :class_name => "Pet"
+  has_many :sitting_pets, :foreign_key => "sitter_id", :class_name => "Pet"
+
+	...
+
+Pet
+	belongs_to :owner, :class_name => "User"
+  belongs_to :sitter, :class_name => "User"
+
+	owner_id:integer
+	sitter_id:integer
+	...
+
+
+---------
+2. You like hosting people for dinner so you want to build a dinner party invitation site. A user can create parties, invite people to a party, and accept an invitation to someone else's party.
+
+User
+	has_many :parties, through: user_parties_relationships
+
+	...
+
+Party
+	has_many :users, through: user_parties_relationships
+
+	...
+
+User_party_relationship
+	belongs_to :party
+	belongs_to :user
+
+	status:string
+	party_id
+	user_id
+
+	validates :status, inclusion: { in: %w(invited accepted owner) }
+
+---------
+3. Extra credit (tricky): You and your friends just love posting things and following each other. How would you set up the models so a user can follow another user?
+
+similar to 2 with a table extra that details the self-join relationship between the users.
