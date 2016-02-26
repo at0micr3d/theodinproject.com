@@ -10,18 +10,18 @@ User:
 	age:integer
 
 Event: 
-	belongs_to: :owner, class_name: "User"
+	belongs_to :owner, class_name: "User"
 	owner_id:reference
 
-	has_many: :invitees, through: :invitation, :source => :invitation_user
+	has_many :invitees, through: :invitation, :source => :invitation_user
 
 	location:string
-	date:date
+	time:date
 
 
 Invitation:
-	belongs_to: :invitation_event, :class_name => "Event"
-	belongs_to: :invitation_user, :class_name => "User"
+	belongs_to :invitation_event, :class_name => "Event"
+	belongs_to :invitation_user, :class_name => "User"
 	invitation_event_id:reference
 	invitation_user_id:reference
 
