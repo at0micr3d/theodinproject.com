@@ -15,6 +15,9 @@ Event:
 
 	has_many: :invitees, through: :invitation, :source => :invitation_user
 
+	location:string
+	date:date
+
 
 Invitation:
 	belongs_to: :invitation_event, :class_name => "Event"
