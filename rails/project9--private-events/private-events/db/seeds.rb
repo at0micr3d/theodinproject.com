@@ -6,3 +6,4 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 u1 = User.create(name: "owner 1", age: 10)
+e1 = Event.create(description: "event 1", location: 'holland', time: Time.now, owner: u1)

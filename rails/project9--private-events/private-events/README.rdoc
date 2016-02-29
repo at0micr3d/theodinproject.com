@@ -12,7 +12,7 @@ User:
 Event:
 	belongs_to :owner, :class_name => "User"
 	has_many :invitees, through: :invitation, :source => :user
-	owner:reference
+	owner_id:integer
 
 	description:string
 	location:string
