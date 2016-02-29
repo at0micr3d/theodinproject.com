@@ -15,8 +15,10 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		@created_events = @user.owner_events
-		@invited_events = @user.invitee_events
+		@created_events_past = @user.owner_events.past
+		@created_events_future = @user.owner_events.future
+		@invited_events_past = @user.invitee_events.past
+		@invited_events_future = @user.invitee_events.future
 	end
 
 	private

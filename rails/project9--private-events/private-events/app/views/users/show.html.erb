@@ -6,23 +6,42 @@
 	User age: <%= @user.age %>
 </div>
 <br>
-<% unless @created_events == nil %>
-	<div><b><%= @user.name %> has created the following events: </b></div> 
-<% end %>
-<% @created_events.each do |e| %>
-	<div><%= e.description %></div>
-	<div><%= e.location %></div>
-	<div><%= e.date %></div>
-	<hr>
-<% end %>
-
-<% unless @invited_events == nil %>
-	<div><b><%= @user.name %> has been invited to these events: </b></div> 
-<% end %>
-<% @invited_events.each do |e| %>
-	<div><%= e.description %></div>
-	<div><%= e.location %></div>
-	<div><%= e.date %></div>
-	<hr>
+<div><b><%= @user.name %> has created the following events: </b></div> 
+<% unless @created_events_future == nil %>
+	<div><b>Future events:</b></div>
+	<% @created_events_future.each do |e| %>
+	  <div><%= e.description %></div>
+	  <div><%= e.location %></div>
+	  <div><%= e.date %></div>
+	  <hr>
+	<% end %>
 <% end %>
 
+<% unless @created_events_past == nil %>
+	<div><b>Past events:</b></div>
+	<% @created_events_past.each do |e| %>
+	  <div><%= e.description %></div>
+	  <div><%= e.location %></div>
+	  <div><%= e.date %></div>
+	  <hr>
+	<% end %>
+<% end %>
+
+<div><b><%= @user.name %> has been invited to the following events: </b></div> 
+<% unless @invited_events_future == nil %>
+	<% @invited_events_future.each do |e| %>
+	  <div><%= e.description %></div>
+  	<div><%= e.location %></div>
+  	<div><%= e.date %></div>
+  	<hr>
+	<% end %>
+<% end %>
+
+<% unless @invited_events_past == nil %>
+	<% @invited_events_past.each do |e| %>
+	  <div><%= e.description %></div>
+  	<div><%= e.location %></div>
+  	<div><%= e.date %></div>
+  	<hr>
+	<% end %>
+<% end %>

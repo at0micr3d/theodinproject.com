@@ -12,6 +12,6 @@ u3 = e1.invitees.create(name: "part. 2", age: 12)
 
 u2 = User.create(name: "Fiene", age: 1)
 20.times do |i|
-	Event.create(description: "event future #{i}", location: "holland district #{i}", date: Time.now + i, owner: u2)
-	Event.create(description: "event past #{i}", location: "holland district #{i}", date: Time.now - i, owner: u2)
+	Event.create(description: "event future #{i}", location: "holland district #{i}", date: Time.now + i.days, owner: u2)
+	Event.create(description: "event past #{i}", location: "holland district #{i}", date: Time.now - i.days, owner: u2)
 end
