@@ -7,9 +7,11 @@ class EventsController < ApplicationController
 
 	def index
 		@events = Event.all
+
 	end
 
 	def show
+		p @invitees = @event.invitees
 	end
 
 	def create

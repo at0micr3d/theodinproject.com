@@ -7,3 +7,5 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 u1 = User.create(name: "owner 1", age: 10)
 e1 = Event.create(description: "event 1", location: 'holland', date: Time.now, owner: u1)
+u2 = e1.invitees.create(name: "part. 1", age: 11)
+u3 = e1.invitees.create(name: "part. 2", age: 12)

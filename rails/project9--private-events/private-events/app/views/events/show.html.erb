@@ -11,3 +11,13 @@
 <div>
 	Event date: <%= @event.date %>
 </div>
+
+
+<% unless @invitees == nil %>
+	<hr><div><b>The following people are invited tot this event: </b></div> 
+<% end %>
+<% @invitees.each do |u| %>
+	<div>User name: <%= u.name %></div>
+	<div>User age: <%= u.age %></div>
+	<br>
+<% end %>
