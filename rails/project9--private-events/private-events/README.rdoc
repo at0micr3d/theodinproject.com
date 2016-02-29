@@ -1,28 +1,25 @@
-== README
+# README
+Part of theodinproject.com curriculum. This is (rails assignment project 9)[http://www.theodinproject.com/ruby-on-rails/associations?ref=lnav]
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Data models:
 
-Things you may want to cover:
+User:
+	has_many :owner_events, :foreign_key => "Owner", :class_name => "Event"
+	has_many :invitee_events, :through => :invitation, :source => :event
+	name:string
+	age:integer
 
-* Ruby version
+Event:
+	belongs_to :owner, :class_name => "User"
+	has_many :invitees, through: :invitation, :source => :user
+	owner:reference
 
-* System dependencies
+	description:string
+	location:string
+	date:date
 
-* Configuration
+Invitation:
+	belongs_to :user
+	belongs_to :event
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+	status:string #only pending and accepted
