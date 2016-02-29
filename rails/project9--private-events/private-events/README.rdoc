@@ -1,28 +1,28 @@
-# README
-This rails project is a practice assignment from [theodinproject.com](http://www.theodinproject.com/ruby-on-rails/associations?ref=lnav)
+== README
 
-## Models used:
-User: 
-	has_many :event_owners, :class_name => "Event", :foreign_key => "owner_id"
-	has_many :event_invitations, through: :invitation, :source => :invitation_event
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-	name:string
-	age:integer
+Things you may want to cover:
 
-Event: 
-	belongs_to :owner, class_name: "User"
-	owner_id:reference
+* Ruby version
 
-	has_many :invitees, through: :invitation, :source => :invitation_user
+* System dependencies
 
-	location:string
-	time:date
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
 
 
-Invitation:
-	belongs_to :invitation_event, :class_name => "Event"
-	belongs_to :invitation_user, :class_name => "User"
-	invitation_event_id:reference
-	invitation_user_id:reference
-
-	status:string #user either accepted, rejected or is pending
+Please feel free to use a different markup language if you do not plan to run
+<tt>rake doc:app</tt>.

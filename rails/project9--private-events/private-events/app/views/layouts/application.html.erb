@@ -7,14 +7,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<div class="logged_in_as">
-		<% if current_user %>
-  	  Logged in as <%= current_user %>.
-		<% else %>
-	  	Please log in <%= link_to("here", login_path) %>
-		<% end %>
-	</div>
-	<%= yield %>
+
+<%= yield %>
 
 </body>
 </html>
