@@ -15,7 +15,8 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		@events = @user.owner_events
+		@created_events = @user.owner_events
+		@invited_events = @user.invitee_events
 	end
 
 	private

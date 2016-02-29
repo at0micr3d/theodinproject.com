@@ -11,7 +11,7 @@
 <div>
 	Event date: <%= @event.date %>
 </div>
-
+<div>Back to all <%= link_to("events", events_path) %>.</div>
 
 <% unless @invitees == nil %>
 	<hr><div><b>The following people are invited tot this event: </b></div> 

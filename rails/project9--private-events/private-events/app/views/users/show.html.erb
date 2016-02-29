@@ -6,10 +6,20 @@
 	User age: <%= @user.age %>
 </div>
 <br>
-<% unless @events == nil %>
+<% unless @created_events == nil %>
 	<div><b><%= @user.name %> has created the following events: </b></div> 
 <% end %>
-<% @events.each do |e| %>
+<% @created_events.each do |e| %>
+	<div><%= e.description %></div>
+	<div><%= e.location %></div>
+	<div><%= e.date %></div>
+	<hr>
+<% end %>
+
+<% unless @invited_events == nil %>
+	<div><b><%= @user.name %> has been invited to the following events: </b></div> 
+<% end %>
+<% @invited_events.each do |e| %>
 	<div><%= e.description %></div>
 	<div><%= e.location %></div>
 	<div><%= e.date %></div>
