@@ -1,0 +1,14 @@
+<h1>Create a new User</h1>
+<%= form_for(@user) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :age %><br>
+    <%= f.number_field(:age, in: 1..100, step: 1) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
