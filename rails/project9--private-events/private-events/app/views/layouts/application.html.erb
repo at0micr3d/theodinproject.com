@@ -7,11 +7,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<% if current_user == nil %>
-  	<div>Please log in <%= link_to("here", new_session_path) %></div>
-	<% else %>
-	  <div>Currently logged in as; <%= current_user %></div>
-  <% end %>	
+<%= render "shared/header" %>
+	
 
 
 <%= yield %>

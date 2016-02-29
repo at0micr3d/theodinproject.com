@@ -1,0 +1,16 @@
+<div style="position:relative;top:0;left:0;width:300px;">
+	<%= link_to("Login", new_session_path) %> |
+	<%= link_to("All events", events_path) %> |
+	<%= link_to("Create event", new_event_path) %> |
+	<%= link_to("Create user", new_user_path) %>
+</div>
+
+<% if current_user == nil %>
+ 	<div style="position:absolute;top:0;right:0;width:200px;">Please log in <%= link_to("here", new_session_path) %></div>
+<% else %>
+  <div style="position:absolute;top:0;right:0;width:200px;">Currently logged in as; <%= current_user %></div>
+<% end %>	
+
+<% flash.each do |key, value| %>
+  <%= content_tag :div, value, class: "flash #{key}" %>
+<% end %>

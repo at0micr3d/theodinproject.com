@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+	before_action :set_user, only: [:new, :create]
 	before_action :set_event, only: [:show]
 
 	def new
@@ -12,11 +13,10 @@ class EventsController < ApplicationController
 	end
 
 	def show
-		p @invitees = @event.invitees
+		@invitees = @event.invitees
 	end
 
-	def create
-		@user = User.find_by(name: cookies[:name])
+	def create		
 		@event = @user.owner_events.build(event_params)
 
 		if @event.save
@@ -30,6 +30,14 @@ class EventsController < ApplicationController
 
 	def set_event
 		@event = Event.find(params[:id])
+	end
+  
+  def set_user
+		 p @user = User.find_by(name: cookies[:name])
+		 if @user == nil
+			flash[:error] = "You must be logged in to access this section"
+      redirect_to new_session_url
+		end
 	end
 
 	def event_params
