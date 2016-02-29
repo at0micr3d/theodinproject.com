@@ -13,7 +13,9 @@ class EventsController < ApplicationController
 	end
 
 	def create
-		@event = User.new(user_params)
+		@user = User.find_by(name: cookies[:name])
+		@event = @user.owner_events.build(event_params)
+
 		if @event.save
 			redirect_to @event, notice: 'Event was successfully created.'
 		else
@@ -27,7 +29,7 @@ class EventsController < ApplicationController
 		@event = Event.find(params[:id])
 	end
 
-	def user_params
+	def event_params
 		params.require(:event).permit(:description, :location, :date)
 	end
 end

@@ -1,0 +1,8 @@
+<h1>All events</h1>
+<% @events.each do |e| %>
+	<div>Owner name: <%= e.owner.name %></div>
+	<div>Event description: <%= e.description %></div>
+	<div>Event location: <%= e.location %></div>
+	<div>Event date: <%= e.date %></div>
+	<hr>
+<% end %>	
