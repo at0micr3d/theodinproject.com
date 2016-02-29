@@ -17,7 +17,7 @@
 <% end %>
 
 <% unless @invited_events == nil %>
-	<div><b><%= @user.name %> has been invited to the following events: </b></div> 
+	<div><b><%= @user.name %> has been invited to these events: </b></div> 
 <% end %>
 <% @invited_events.each do |e| %>
 	<div><%= e.description %></div>
