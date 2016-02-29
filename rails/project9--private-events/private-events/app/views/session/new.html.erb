@@ -1,0 +1,6 @@
+<h1>Sign in here:</h1>
+<%= form_tag("/session", method: "post") do %>
+  <%= label_tag(:name, "Sign in name: ") %>
+  <%= text_field_tag(:name) %>
+  <%= submit_tag("Log in") %>
+<% end %>
