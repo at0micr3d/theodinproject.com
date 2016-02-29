@@ -5,3 +5,10 @@
 <div>
 	User age: <%= @user.age %>
 </div>
+<br>
+<% @events.each do |e| %>
+	<div><%= e.description %></div>
+	<div><%= e.location %></div>
+	<div><%= e.date %></div>
+<% end %>
+
