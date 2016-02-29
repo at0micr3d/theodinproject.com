@@ -1,5 +1,6 @@
 <h1>All events</h1>
-<% @events.each do |e| %>
+<h2>Future events:</h2>
+<% @events_future.each do |e| %>
 	<div>Owner name: <%= e.owner.name %></div>
 	<div>Event description: <%= e.description %></div>
 	<div>Event location: <%= e.location %></div>
@@ -7,3 +8,13 @@
 	<div><%= link_to("Go to event", e) %></div>
 	<hr>
 <% end %>	
+
+<h2>Past events:</h2>
+<% @events_past.each do |e| %>
+	<div>Owner name: <%= e.owner.name %></div>
+	<div>Event description: <%= e.description %></div>
+	<div>Event location: <%= e.location %></div>
+	<div>Event date: <%= e.date %></div>
+	<div><%= link_to("Go to event", e) %></div>
+	<hr>
+<% end %>
