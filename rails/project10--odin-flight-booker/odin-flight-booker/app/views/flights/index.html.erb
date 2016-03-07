@@ -2,8 +2,22 @@
 
 
 <%= form_tag({controller: :flights, action: "index"}, method: "get") do %>
-	<%= label_tag(:q, "Search flights:") %>
-  <%= text_field_tag(:q) %>
+	<div>
+		<%= label_tag(:from_airport_id, "From airport:") %>
+		<%= select_tag(:from_airport_id, options_for_select(@airport_options)) %>
+	</div>
+	<div>
+		<%= label_tag(:to_airport_id, "To airport:") %>
+		<%= select_tag(:to_airport_id, options_for_select(@airport_options)) %>
+	</div>
+	<div>
+		<%= label_tag(:nr_passengers, "Number of passengers:") %>
+		<%= select_tag(:nr_passengers, options_for_select([[1, 1], [2, 2], [3, 3], [4, 4]])) %>
+	</div>
+	<div>
+		<%= label_tag(:date, "Flight date:") %>
+		<%= select_tag(:date, options_for_select(@flight_date_options)) %>
+	</div>
   <%= submit_tag("Search") %>
 <% end %>	
 
