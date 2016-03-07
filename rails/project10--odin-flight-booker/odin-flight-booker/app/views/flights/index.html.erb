@@ -1,8 +1,19 @@
-test
-<% @flights.each do |f| %>
-  <div><%= f.number %></div>
-  <div><%= f.from_airport_id %></div>
-  <div><%= f.to_airport_id %></div>
-  <div><%= f.departure_time %></div>
-  <div><%= f.flight_duration %></div>
+<h1>All flights</h1>
+
+
+<%= form_tag({controller: :flights, action: "index"}, method: "get") do %>
+	<%= label_tag(:q, "Search flights:") %>
+  <%= text_field_tag(:q) %>
+  <%= submit_tag("Search") %>
+<% end %>	
+
+<% unless @flights == nil %>
+	<% @flights.each do |f| %>
+	  <div>Flight number: <%= f.number %></div>
+	  <div>From: <%= f.from_airport_id %></div>
+	  <div>To: <%= f.to_airport_id %></div>
+	  <div>Departure at: <%= f.departure_time %></div>
+	  <div>Flight duration: <%= f.flight_duration / 3600%> hrs.</div>
+	  <hr>
+	<% end %>
 <% end %>

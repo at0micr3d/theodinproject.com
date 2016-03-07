@@ -1,5 +1,7 @@
 class FlightsController < ApplicationController
 	def index
-		@flights = Flight.all
+		unless params[:q] == nil
+			@flights = Flight.all
+		end
 	end
 end
