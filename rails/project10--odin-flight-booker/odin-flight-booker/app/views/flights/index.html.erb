@@ -1,0 +1,8 @@
+test
+<% @flights.each do |f| %>
+  <div><%= f.number %></div>
+  <div><%= f.from_airport_id %></div>
+  <div><%= f.to_airport_id %></div>
+  <div><%= f.departure_time %></div>
+  <div><%= f.flight_duration %></div>
+<% end %>
