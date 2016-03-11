@@ -1,7 +1,7 @@
 class FlightsController < ApplicationController
 	def index
 		@airport_options = Airport.all.map { |a| [a.code, a.id] }
-		p @flight_date_options = Flight.all.map { |f| [f.departure_time.to_date, f.id] }
+		@flight_date_options = Flight.all.map { |f| [f.departure_time.to_date, f.id] }
 		
 
 		unless params[:departure_date] == nil
@@ -10,4 +10,3 @@ class FlightsController < ApplicationController
 		end
 	end
 end
-#
