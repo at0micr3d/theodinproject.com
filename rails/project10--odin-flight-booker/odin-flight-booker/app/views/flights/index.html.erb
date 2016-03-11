@@ -1,22 +1,21 @@
 <h1>All flights</h1>
 
-
 <%= form_tag({controller: :flights, action: "index"}, method: "get") do %>
 	<div>
 		<%= label_tag(:from_airport_id, "From airport:") %>
-		<%= select_tag(:from_airport_id, options_for_select(@airport_options)) %>
+		<%= select_tag(:from_airport_id, options_for_select(@airport_options, params[:from_airport_id])) %>
 	</div>
 	<div>
 		<%= label_tag(:to_airport_id, "To airport:") %>
-		<%= select_tag(:to_airport_id, options_for_select(@airport_options)) %>
+		<%= select_tag(:to_airport_id, options_for_select(@airport_options, params[:to_airport_id])) %>
 	</div>
 	<div>
 		<%= label_tag(:nr_passengers, "Number of passengers:") %>
-		<%= select_tag(:nr_passengers, options_for_select([[1, 1], [2, 2], [3, 3], [4, 4]])) %>
+		<%= select_tag(:nr_passengers, options_for_select([[1, 1], [2, 2], [3, 3], [4, 4]], params[:nr_passengers])) %>
 	</div>
 	<div>
-		<%= label_tag(:date, "Flight date:") %>
-		<%= select_tag(:date, options_for_select(@flight_date_options)) %>
+		<%= label_tag(:departure_date, "Flight date:") %>
+		<%= select_tag(:departure_date, options_for_select(@flight_date_options, params[:date])) %>
 	</div>
   <%= submit_tag("Search") %>
 <% end %>	
@@ -27,7 +26,7 @@
 	  <div>From: <%= f.from_airport_id %></div>
 	  <div>To: <%= f.to_airport_id %></div>
 	  <div>Departure at: <%= f.departure_time %></div>
-	  <div>Flight duration: <%= f.flight_duration / 3600%> hrs.</div>
+	  <div>Flight duration: <%= distance_of_time_in_words(f.flight_duration)%>.</div>
 	  <hr>
 	<% end %>
 <% end %>
