@@ -15,18 +15,27 @@
 	</div>
 	<div>
 		<%= label_tag(:departure_date, "Flight date:") %>
-		<%= select_tag(:departure_date, options_for_select(@flight_date_options, params[:date])) %>
+		<%= select_tag(:departure_date, options_for_select(@flight_date_options, params[:departure_date])) %>
 	</div>
   <%= submit_tag("Search") %>
 <% end %>	
 
+<hr>
 <% unless @flights == nil %>
-	<% @flights.each do |f| %>
-	  <div>Flight number: <%= f.number %></div>
-	  <div>From: <%= f.from_airport_id %></div>
-	  <div>To: <%= f.to_airport_id %></div>
-	  <div>Departure at: <%= f.departure_time %></div>
-	  <div>Flight duration: <%= distance_of_time_in_words(f.flight_duration)%>.</div>
-	  <hr>
+	<%= form_tag({controller: :bookings, action: 'new'}, method: 'get') do %>
+  	<% @flights.each do |f| %>
+	    <div>
+	    	<div>
+	    	<%= radio_button_tag(:booking, "flight_#{f.number}") %>
+	    	<%= label_tag(:booking, "Flight #{f.number}") %></div>
+	    	<%= hidden_field_tag(:nr_passengers, params[:nr_passengers]) %>
+  	    <div>From: <%= f.from_airport_id %></div>
+  	    <div>To: <%= f.to_airport_id %></div>
+  	    <div>Departure at: <%= f.departure_time %></div>
+  	    <div>Flight duration: <%= distance_of_time_in_words(f.flight_duration)%>.</div>
+  	    <hr>
+  	  </div> 
+    <% end %>
+    <%= submit_tag("Book") %>
 	<% end %>
 <% end %>
