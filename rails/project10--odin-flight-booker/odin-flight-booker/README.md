@@ -4,7 +4,7 @@ Part of theodinproject.com curriculum. [Rails assignment 10](http://www.theodinp
 ## DATA MODELS
 Booking:
   has_one :flight
-  has_one :customer
+  has_many :customers
 
 Airport:
   has_many :arriving_flights, class_name: "Flight", foreign_key: "to_airport_id"
@@ -16,4 +16,4 @@ Flight:
   has_many :bookings
 
 Customer:
-  has_many :bookings
+  has_one :booking

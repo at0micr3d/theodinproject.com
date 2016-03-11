@@ -1,1 +1,36 @@
-test
+<h1>Book Flight <%= @flight.number %></h1>
+<div>
+	<div>From airport: <%= @flight.from_airport_id %></div>
+	<div>To airport: <%= @flight.to_airport_id %></div>
+	<div>Departure time: <%= @flight.departure_time %></div>
+	<div>Flight duration: <%= @flight.flight_duration %></div>
+</div>
+<hr>
+<div>Please fill in your credentials:</div>
+<%= form_for(@booking) do |booking_form| %>
+  <%= booking_form.fields_for :customers, @booking.customers do |cstr_frm| %>
+    <div style="padding: 5px">
+    	<h2>Passenger</h2>
+    	<div><%= cstr_frm.label(:name) %>
+    	<%= cstr_frm.text_field(:name) %></div>
+   		<div><%= cstr_frm.label(:age) %>
+ 			<%= cstr_frm.text_field(:age) %></div>
+ 			<div><%= cstr_frm.label(:passport_nr) %>
+			<%= cstr_frm.text_field(:passport_nr) %></div>
+			<div><%= cstr_frm.label(:street) %>
+			<%= cstr_frm.text_field(:street) %></div>
+			<div><%= cstr_frm.label(:city) %>
+			<%= cstr_frm.text_field(:city) %></div>
+		</div>
+	<% end %>
+  <%= booking_form.submit("Book!") %>
+<% end %>
+
+<!-- 
+	    <div>Name: <%= %> </div>
+	    t.string   "name"
+    t.integer  "age"
+    t.integer  "passport_nr"
+    t.integer  "street"
+    t.string   "city"
+ -->

@@ -1,4 +1,5 @@
 class Booking < ActiveRecord::Base
-	def new
-	end
+	has_many :customers
+	accepts_nested_attributes_for :customers
+	has_one :flight
 end
