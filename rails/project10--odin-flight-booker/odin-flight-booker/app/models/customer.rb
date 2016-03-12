@@ -1,3 +1,3 @@
 class Customer < ActiveRecord::Base
-	has_one :booking
+	belongs_to :booking
 end
