@@ -17,13 +17,14 @@ class BookingsController < ApplicationController
 	def create
 		@booking = Booking.new(booking_params)
 		@booking.date = DateTime.now
-		@booking.price = @booking.customers.count * 500
+		nr_customers = params[:booking][:customers_attributes].count
+		@booking.price = nr_customers * 500
 
 		if @booking.save
-			flash[:succes] = "You have booked the flight"
+			flash[:succes] = "You have booked the flight!"
 			redirect_to @booking
 		else
-			flash[:error] = "Could not book your flight"
+			flash[:error] = "Could not book your flight!"
 			render 'flights#index'
 		end
 	end

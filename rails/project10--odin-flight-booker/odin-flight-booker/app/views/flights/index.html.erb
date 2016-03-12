@@ -1,4 +1,4 @@
-<h1>All flights</h1>
+<h3>Search for flights:</h3>
 
 <%= form_tag({controller: :flights, action: "index"}, method: "get") do %>
 	<div>
@@ -20,8 +20,9 @@
   <%= submit_tag("Search") %>
 <% end %>	
 
-<hr>
 <% unless @flights == nil %>
+	<h3>Choose your flight:</h3>
+	<hr>
 	<%= form_tag({controller: :bookings, action: 'new'}, method: 'get') do %>
   	<% @flights.each do |f| %>
 	    <div>
@@ -29,8 +30,8 @@
 	    	<%= radio_button_tag(:flight_id, f.id) %>
 	    	<%= label_tag(:flight_id, "Flight #{f.number}") %></div>
 	    	<%= hidden_field_tag(:nr_passengers, params[:nr_passengers]) %>
-  	    <div>From: <%= f.from_airport_id %></div>
-  	    <div>To: <%= f.to_airport_id %></div>
+  	    <div>From: <%= f.from_airport.code %></div>
+  	    <div>To: <%= f.to_airport.code %></div>
   	    <div>Departure at: <%= f.departure_time %></div>
   	    <div>Flight duration: <%= distance_of_time_in_words(f.flight_duration)%>.</div>
   	    <hr>

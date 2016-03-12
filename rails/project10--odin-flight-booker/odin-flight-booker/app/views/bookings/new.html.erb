@@ -1,17 +1,17 @@
 <h1>Book Flight <%= @flight.number %></h1>
 <div>
-	<div>From airport: <%= @flight.from_airport_id %></div>
-	<div>To airport: <%= @flight.to_airport_id %></div>
+	<div>From airport: <%= @flight.from_airport.code %></div>
+	<div>To airport: <%= @flight.to_airport.code %></div>
 	<div>Departure time: <%= @flight.departure_time %></div>
-	<div>Flight duration: <%= @flight.flight_duration %></div>
+	<div>Flight duration: <%= distance_of_time_in_words(@flight.flight_duration) %></div>
 </div>
 <hr>
-<div>Please fill in your credentials:</div>
+<div><h2>Please fill in your credentials:</h2></div>
 <%= form_for(@booking) do |booking_form| %>
   <%= booking_form.hidden_field(:flight_id, :value => @flight.id.to_s) %>
   <%= booking_form.fields_for :customers, @booking.customers do |cstr_frm| %>
     <div style="padding: 5px">
-    	<h2>Passenger</h2>
+    	<div><b>Passenger information:</b></div>
     	<div><%= cstr_frm.label(:name) %>
     	<%= cstr_frm.text_field(:name) %></div>
    		<div><%= cstr_frm.label(:age) %>
@@ -24,5 +24,5 @@
 			<%= cstr_frm.text_field(:city) %></div>
 		</div>
 	<% end %>
-  <%= booking_form.submit("Book!") %>
+  <div><%= booking_form.submit("Book!") %></div>
 <% end %>

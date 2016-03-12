@@ -1,11 +1,15 @@
-succes!
-<%= @booking.date %>
-<%= @booking.flight_id %>
-<%= @booking.price %>
-<% @passengers.each do |c| %>
-	<div><%= c.name %></div>
-	<div><%= c.age %></div>
-	<div><%= c.passport_nr %></div>
+<h2>Booking details:</h2>
+	<div>Booking flight number: <%= @booking.flight.number %></div>
+	<div>Flying from: <%= @booking.flight.from_airport.code %></div>
+	<div>Flying to: <%= @booking.flight.to_airport.code %></div>
+	<div>Booking date: <%= @booking.date %></div>
+	<div>Booking cost: €<%= number_with_precision(@booking.price, :precision => 2) %></div>
+	<hr>
+	<h2>Booked for:</h2>
+	<% @passengers.each do |c| %>
+	<div>Name: <%= c.name %></div>
+	<div>Age: <%= c.age %></div>
+	<div>Street adress: <%= c.street %></div>
+	<div>Passport number: <%= c.passport_nr %></div>
 <% end %>
-<%= @flight.number %> 
 
