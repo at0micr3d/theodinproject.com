@@ -1,0 +1,11 @@
+succes!
+<%= @booking.date %>
+<%= @booking.flight_id %>
+<%= @booking.price %>
+<% @passengers.each do |c| %>
+	<div><%= c.name %></div>
+	<div><%= c.age %></div>
+	<div><%= c.passport_nr %></div>
+<% end %>
+<%= @flight.number %> 
+

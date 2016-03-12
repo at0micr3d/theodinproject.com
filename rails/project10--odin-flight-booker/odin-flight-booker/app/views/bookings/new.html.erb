@@ -8,6 +8,7 @@
 <hr>
 <div>Please fill in your credentials:</div>
 <%= form_for(@booking) do |booking_form| %>
+  <%= booking_form.hidden_field(:flight_id, :value => @flight.id.to_s) %>
   <%= booking_form.fields_for :customers, @booking.customers do |cstr_frm| %>
     <div style="padding: 5px">
     	<h2>Passenger</h2>
@@ -25,12 +26,3 @@
 	<% end %>
   <%= booking_form.submit("Book!") %>
 <% end %>
-
-<!-- 
-	    <div>Name: <%= %> </div>
-	    t.string   "name"
-    t.integer  "age"
-    t.integer  "passport_nr"
-    t.integer  "street"
-    t.string   "city"
- -->
