@@ -1,0 +1,17 @@
+<%= form_for(@scooter) do |f| %>
+  <% if @scooter.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@scooter.errors.count, "error") %> prohibited this scooter from being saved:</h2>
+
+      <ul>
+      <% @scooter.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

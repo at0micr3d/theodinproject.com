@@ -1,0 +1,19 @@
+<%= form_for @kitten do |kitten| %>
+	<div>
+		<%= kitten.label(:name, "Name") %>
+		<%= kitten.text_field(:name) %>
+	</div>
+	<div>
+		<%= kitten.label(:age, "Age") %>
+		<%= kitten.number_field(:age, in: 1..30) %>
+	</div>
+	<div>
+		<%= kitten.label(:cuteness, "Cuteness") %>
+		<%= kitten.select(:cuteness, options_for_select([["Horrible",1],["Bleh",2], ["Neutral",3], ["OK",4], ["Great",5], ["Uber!",6]], 3)) %>
+	</div>
+	<div>
+		<%= kitten.label(:softness, "Softness") %>
+		<%= kitten.text_field(:softness) %>
+	</div>
+	<%= kitten.submit("submit") %>
+<% end %>
