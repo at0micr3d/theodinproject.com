@@ -1,2 +1,18 @@
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p>
+<h1>Flickr Searches</h1>
+<p>Search for folders from users.</p>
+<%= form_tag({controller: 'static_pages', action: "home"}, method: "get") do %>
+	<div>
+	<%= label_tag :user_id, "Search for user:"  %>
+	</div>
+	<%= text_field_tag :user_id %>
+	<%= submit_tag "show" %>
+<% end %>
+<p></p>
+
+<% if params[:user_id] %>
+  <% cache ("sidebar_widget") do %>
+    <%= render_flickr_sidebar_widget(params[:user_id]) %>
+  <% end %>	
+<% end %>
+<!-- 
+'139304057@N03' -->
