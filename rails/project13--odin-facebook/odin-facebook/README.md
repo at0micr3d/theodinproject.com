@@ -1,5 +1,5 @@
 # README
-This is the [final assignment of theodinproject.com](http://www.theodinproject.com/ruby-on-rails/final-project)
+This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails/final-project) of theodinproject.com
 
 ## Requirements
 
@@ -29,7 +29,7 @@ The following models were used:
 User:
 	has_many :requesting_friendships, class_name: :friendship, foreign_key: :requestee, dependent: :destroy
 	has_many :requested_friendships, class_name: :friendship, foreign_key: :requester, dependent: :destroy
-  has_many :requesting_friends, through: :requesting_friendships, source: :requester
+	has_many :requesting_friends, through: :requesting_friendships, source: :requester
   has_many :requested_friends, through: :requested_friendships, source: :requestee
 
   has_many :authored_posts, class_name: :post, foreign_key: :author
@@ -70,10 +70,3 @@ Comment:
 	belongs_to :post
 	post_id
 ```
-
-```ruby 
-Comment:
-	belongs_to :post
-	post_id
-'''
-
