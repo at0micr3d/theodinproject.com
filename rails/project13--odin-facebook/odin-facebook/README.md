@@ -35,6 +35,7 @@ User:
   has_many :authored_posts, class_name: :post, foreign_key: :author
   has_many :user_posts
   has_many :liked_posts, through: :user_posts, source: :post
+
 ```
 
 ```ruby
@@ -69,3 +70,10 @@ Comment:
 	belongs_to :post
 	post_id
 ```
+
+```ruby 
+Comment:
+	belongs_to :post
+	post_id
+'''
+
