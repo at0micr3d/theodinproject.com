@@ -46,16 +46,19 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
 end
 
 group :development, :test do
   gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'minitest' # otherwise rspec bugs out
+  gem "spring-commands-rspec"
   gem 'rspec-rails' # test framework. !Use rails g rspec:install after bundlemail adresses and names!
   gem 'factory_girl_rails' # replaces Rails’ default fixtures for feeding test data to the test suite with much more preferable factories
 end
 
 group :test do
-  gem 'turn' # pretty printing for test results
+  #gem 'turn' # pretty printing for test results
   gem 'capybara' # integration test framework
   gem 'launchy' # launches browser as soon as an integration test fails to show what the application renders    
   gem 'guard-rspec' # automatically runs test when changes. replaces rake test. run guard init rspec after rspec install
