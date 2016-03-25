@@ -39,27 +39,62 @@ RSpec.describe User, type: :model do
 	end
 
 	context "by using friendship relationship" do
-
-		it "is able to send a friendship request" do
-			requesting_user = create(:user)
-			requested_user = create(:user)
-
-			# create(:friendship, requester_id: requesting_user, requestee_id: requested_user)
-			friendship = requesting_user.requesting_friendships.create(requestee_id: requested_user)
-			# friendship = Friendship.create(requester_id: requesting_user.id, requestee_id: requested_user.id)
-			expect(friendship.requester_id).to eql requesting_user.id
+		
+		before :each do
+			@requesting_user = create(:user)
+			@requested_user = create(:user)
+			@requesting_user.request_friendship(@requested_user)
 		end
 
-		it "is able to accept a friendship request"
+		it "is able to send a friendship request" do
+			@requesting_user.request_friendship(@requested_user)
+			expect(@requesting_user.requested_friendships.first.requestee_id).to eql @requested_user.id
+		end
 
-		it "is able to get his requested friends"
+		it "is able to accept a friendship request" do
+			@requested_user.accept_request(@requesting_user)
+			expect(@requested_user.requesting_friendships.first.accepted).to eql true
+		end
 
-		it "is able to get his requesting friends"
+		it "is able to get his requested friends if they were accepted" do
+			@requested_user.accept_request(@requesting_user)
+			expect(@requesting_user.friends_who_have_accepted.take.id).to eql @requested_user.id
+		end
 
-		it "is able to get all his friends"
+		it "is not able to get his requested friends if they have not accepted" do
+			expect(@requesting_user.friends_who_have_accepted.count).to eql 0
+		end
+
+		it "is able to get his requesting friends that he has accepted" do
+			@requested_user.accept_request(@requesting_user)
+			expect(@requested_user.friends_who_are_accepted.take.id).to eql @requesting_user.id
+		end
+
+		it "is not able to get his requesting friends that he has not accepted" do
+			expect(@requested_user.friends_who_are_accepted.count).to eql 0
+		end
+
+		it "is able to get all his friends (either requested or requesting)" do
+			user = create(:user)
+			
+			requesting_users = [ create(:user) , create(:user), create(:user), create(:user), create(:user) ]
+			requesting_users.each do |u| 
+				u.request_friendship(user) 
+				user.accept_request(u)
+			end
+
+			to_request_users = [ create(:user) , create(:user) ]
+			to_request_users.each do |u| 
+				user.request_friendship(u)
+				u.accept_request(user)
+			end
+
+			expect(user.friends.count).to eql 7
+		end
+
 	end
 
 	context "by using post relationship" do
-
+		
 	end
 end
