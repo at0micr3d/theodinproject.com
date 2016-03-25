@@ -27,14 +27,14 @@ The following models were used:
 
 ```ruby
 User:
-	has_many :requesting_friendships, class_name: :friendship, foreign_key: :requestee, dependent: :destroy
-	has_many :requested_friendships, class_name: :friendship, foreign_key: :requester, dependent: :destroy
+	has_many :requesting_friendships, class_name: :friendship, foreign_key: :requestee_id, dependent: :destroy
+	has_many :requested_friendships, class_name: :friendship, foreign_key: :requester_id, dependent: :destroy
 	has_many :requesting_friends, through: :requesting_friendships, source: :requester
-  has_many :requested_friends, through: :requested_friendships, source: :requestee
+	has_many :requested_friends, through: :requested_friendships, source: :requestee
 
-  has_many :authored_posts, class_name: :post, foreign_key: :author
-  has_many :user_posts
-  has_many :liked_posts, through: :user_posts, source: :post
+	has_many :authored_posts, class_name: :post, foreign_key: :author
+	has_many :user_posts
+	has_many :liked_posts, through: :user_posts, source: :post
 
 ```
 
@@ -50,8 +50,8 @@ Friendship:
 User_post:
 	belongs_to :user, dependent: :destroy
 	belongs_to :post, dependent: :destroy
-  user_id
-  post_id
+	user_id
+	post_id
 ```
 
 ```ruby
