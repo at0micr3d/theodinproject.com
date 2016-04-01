@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
+<%= will_paginate @users %>
 
 <table class="table table-condensed">
   <thead>
@@ -12,7 +13,9 @@
   </thead>
 
   <tbody>
+    
     <%= render @users %>
+    
   </tbody>
 </table>
 
