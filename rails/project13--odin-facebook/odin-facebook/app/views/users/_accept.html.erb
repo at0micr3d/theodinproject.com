@@ -1,0 +1,1 @@
+<%= button_to "Accept as friend", friendship_path(current_user.id), method: :patch, params: {requestee_id: current_user.id, requester_id: user.id }, :class => "btn btn-default btn-xs" %>

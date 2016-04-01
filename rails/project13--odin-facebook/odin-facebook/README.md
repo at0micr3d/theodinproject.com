@@ -3,6 +3,7 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 
 ## Requirements
 
+### Basics
 * [DONE] Use Postgresql for your database from the beginning (not sqlite3), that way your deployment to Heroku will go much more smoothly. See the Heroku Docs for setup info.
 * [DONE] Users must sign in to see anything except the sign in page.
 * [DONE] User sign-in should use the Devise gem. Devise gives you all sorts of helpful methods so you no longer have to write your own user passwords, sessions, and #current_user methods. See the Railscast (which uses Rails 3) for a step-by-step introduction. The docs will be fully current.
@@ -21,6 +22,9 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * Set up a mailer to send a welcome email when a new user signs up. Use the letter_opener gem (see docs here) to test it in development mode.
 * Deploy your App to Heroku.
 * Set up the SendGrid add-on and start sending real emails. It's free for low usage tiers.
+
+### BONUS
+* Create an admin user with special privaliges.
 
 ## Models
 The following models were used: (non were damaged during the making of this app)
