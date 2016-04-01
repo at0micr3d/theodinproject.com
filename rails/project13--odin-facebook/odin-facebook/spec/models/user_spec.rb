@@ -38,6 +38,13 @@ RSpec.describe User, type: :model do
 		expect(build(:user, firstname: 'Piet', lastname: 'Klaasen').name).to eql "Piet Klaasen"
 	end
 
+	describe "associations" do
+    it { is_expected.to have_many(:requesting_friendships).dependent(:destroy) }
+    it { is_expected.to have_many(:requested_friendships).dependent(:destroy) }
+    it { is_expected.to have_many(:requesting_friends) }
+    it { is_expected.to have_many(:requested_friends) }
+  end
+
 	context "by using friendship relationship" do
 		
 		before :each do

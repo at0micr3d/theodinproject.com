@@ -6,8 +6,8 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * [DONE] Use Postgresql for your database from the beginning (not sqlite3), that way your deployment to Heroku will go much more smoothly. See the Heroku Docs for setup info.
 * [DONE] Users must sign in to see anything except the sign in page.
 * [DONE] User sign-in should use the Devise gem. Devise gives you all sorts of helpful methods so you no longer have to write your own user passwords, sessions, and #current_user methods. See the Railscast (which uses Rails 3) for a step-by-step introduction. The docs will be fully current.
-* Users can send Friend Requests to other Users.
-* A User must accept the Friend Request to become friends.
+* [DONE] Users can send Friend Requests to other Users.
+* [DONE] A User must accept the Friend Request to become friends.
 * The Friend Request shows up in the notifications section of a User's navbar.
 * Users can create Posts (text only to start).
 * Users can Like Posts.
@@ -23,7 +23,7 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * Set up the SendGrid add-on and start sending real emails. It's free for low usage tiers.
 
 ## Models
-The following models were used:
+The following models were used: (non were damaged during the making of this app)
 
 ```ruby
 User:

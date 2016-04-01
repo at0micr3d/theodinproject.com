@@ -39,11 +39,16 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+Capybara.configure do |config|
+  config.run_server = false
+  #config.default_driver = :selenium
+  config.app_host = 'https://www.google.com' # change url
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -91,4 +96,6 @@ RSpec.configure do |config|
 
   # get rid of the long 'FactoryGirl.' before each build or create
   config.include FactoryGirl::Syntax::Methods
+
+  
 end
