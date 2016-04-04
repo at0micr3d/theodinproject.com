@@ -2,16 +2,7 @@
 
 <h2>Your Posts</h2>
 <% @authored_posts.each do |p| %>
-	<div class="post">
-		<% if current_user.has_liked?(p) %>
-			<%= button_to "Unlike", like_path, method: "delete", params: {user_id: current_user.id, post_id: p.id }, :class => "btn btn-secondary btn-xs" %>
-			<!-- <p style="background-color: green; color: white; padding: 1px 4px 2px 4px; width: 65px"><span class="glyphicon glyphicon-ok"></span> Liked!<p> -->
-		<% else %>
-		  <%= button_to "Like", likes_path, method: "post", params: {user_id: current_user.id, post_id: p.id }, :class => "btn btn-primary btn-xs" %>
-		<% end %>
-		
-		<%= p.content %>
-	</div>
+	<%= render 'posts/post', post: p %>
 <% end %>
 <br>
 User <%= @user.id %> |

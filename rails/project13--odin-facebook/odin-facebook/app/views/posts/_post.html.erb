@@ -1,0 +1,15 @@
+<div class="post">
+	<div class="row">
+		<div class="col-sm-4">
+			<% if current_user.has_liked?(post) %>
+			<%= button_to "Unlike", like_path, method: "delete", params: {user_id: current_user.id, post_id: post.id }, :class => "btn btn-secondary btn-xs" %>
+			<!-- <p style="background-color: green; color: white; padding: 1px 4px 2px 4px; width: 65px"><span class="glyphicon glyphicon-ok"></span> Liked!<p> -->
+			<% else %>
+			<%= button_to "Like", likes_path, method: "post", params: {user_id: current_user.id, post_id: post.id }, :class => "btn btn-primary btn-xs" %>
+			<% end %>
+		</div>
+		<div class="col-sm-4">Author: <%= post.author.name %></div>
+		<div class="col-sm-4"><%= pluralize(post.likes.count , "like")%></div>
+	</div>
+	<%= post.content %>
+</div>
