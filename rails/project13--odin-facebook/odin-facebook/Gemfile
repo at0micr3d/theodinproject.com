@@ -48,6 +48,7 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'growl_notify', '~> 0.0.3' # on mac shows a notification when guard runs tests
 
 end
 
@@ -57,6 +58,7 @@ group :development, :test do
   gem "spring-commands-rspec"
   gem 'rspec-rails' # test framework. !Use rails g rspec:install after bundlemail adresses and names!
   gem 'factory_girl_rails' # replaces Rails’ default fixtures for feeding test data to the test suite with much more preferable factories
+  
 end
 
 group :test do
@@ -64,7 +66,7 @@ group :test do
   gem 'capybara' # integration test framework
   gem 'launchy' # launches browser as soon as an integration test fails to show what the application renders    
   gem 'guard-rspec' # automatically runs test when changes. replaces rake test. run guard init rspec after rspec install
-  gem 'growl_notify', '~> 0.0.3' # on mac shows a notification when guard runs tests
+  
   gem "letter_opener" # opens mail send in webpage instead of sending them. requires changed setting in config/environments/development.rb file.
   gem 'faker' # populates test data with fake e
   gem 'shoulda-matchers' # provides some extra matchers for rspec

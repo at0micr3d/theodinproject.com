@@ -2,7 +2,7 @@
 	<td><%= user.name %></td>
 	<td><%= user.age %></td>
 	<td><%= user.email %></td>
-	<td><%= link_to 'Show', user %></td>
+	<td><%= link_to 'show', user %></td>
 	
 	<% if current_user.friends_with?(user) %>
   	<td><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Your friend <span class="glyphicon glyphicon-star" aria-hidden="true"></span><td>

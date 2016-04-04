@@ -5,7 +5,7 @@ RSpec.describe User, type: :model do
 		expect(build(:user)).to be_valid
 	end
 
-	context "validations" do
+	describe "validations" do
 		it "is invalid without a firstname" do
 			expect(build(:user, firstname: nil)).to be_invalid
 		end
@@ -52,7 +52,7 @@ RSpec.describe User, type: :model do
 		
 	end
 
-	context "methods" do
+	describe "methods" do
 
 		context "by using friendship relationship" do
 
@@ -183,5 +183,7 @@ RSpec.describe User, type: :model do
       end
 		end
 	end
+
+	
 
 end

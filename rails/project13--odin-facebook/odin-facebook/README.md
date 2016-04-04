@@ -9,7 +9,7 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * [DONE] User sign-in should use the Devise gem. Devise gives you all sorts of helpful methods so you no longer have to write your own user passwords, sessions, and #current_user methods. See the Railscast (which uses Rails 3) for a step-by-step introduction. The docs will be fully current.
 * [DONE] Users can send Friend Requests to other Users.
 * [DONE] A User must accept the Friend Request to become friends.
-* The Friend Request shows up in the notifications section of a User's navbar.
+* [DONE] The Friend Request shows up in the notifications section of a User's navbar.
 * Users can create Posts (text only to start).
 * Users can Like Posts.
 * Users can Comment on Posts.
