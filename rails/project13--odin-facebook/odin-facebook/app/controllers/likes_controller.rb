@@ -3,8 +3,10 @@ class LikesController < ApplicationController
 
 	def create
 		@like = Like.new(like_params)
-		@like.user_id = params[:user_id]
+		# for some reason the user_id and post_id parameters arent saved.
+		@like.user_id = params[:user_id] 
 		@like.post_id = params[:post_id]
+
 		if @like.save
 			flash.now[:success] = "Liked!"
 			redirect_to session[:my_previous_url]
@@ -15,7 +17,14 @@ class LikesController < ApplicationController
 	end
 
 	def destroy
-
+		@like = Like.find_by(user_id: params[:user_id], post_id: params[:post_id])
+		if @like.destroy
+			flash.now[:success] = "Unliked!"
+			redirect_to session[:my_previous_url]
+		else
+			flash[:error] = "Unable to unlike :("
+			redirect_to session[:my_previous_url]
+		end
 	end
 
 	private

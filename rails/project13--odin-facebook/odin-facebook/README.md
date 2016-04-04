@@ -12,7 +12,7 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * [DONE] The Friend Request shows up in the notifications section of a User's navbar.
 * [DONE] Users can create Posts (text only to start).
 * [DONE] The Users Index page lists all users and buttons for sending Friend Requests to those who are not already friends or who don't already have a pending request.
-* Users can Like Posts.
+* [DONE] Users can Like Posts.
 * Users can Comment on Posts.
 * Posts should always display with the post content, author, comments and likes.
 * Treat the Posts Index page like the real Facebook's "Timeline" feature -- show all the recent posts from the current user and users she is friends with.

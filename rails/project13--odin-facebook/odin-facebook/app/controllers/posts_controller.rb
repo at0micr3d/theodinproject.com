@@ -75,6 +75,6 @@ class PostsController < ApplicationController
 
     # check if the author of the post is the current user
     def check_author
-      current_user.id == post.author_id
+      current_user.id == @post.author_id
     end
 end

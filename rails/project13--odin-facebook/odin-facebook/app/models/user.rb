@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
   include UserMethods::Relationships
 
   # Likes and author of posts
-  has_many :authored_posts, class_name: "Post", foreign_key: :author_id
-  has_many :likes
+  has_many :authored_posts, class_name: "Post", foreign_key: :author_id, dependent: :destroy
+  has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
 
   def has_liked?(post)
