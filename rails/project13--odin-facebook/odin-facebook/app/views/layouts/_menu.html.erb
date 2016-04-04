@@ -1,0 +1,21 @@
+<% if !user_signed_in? %>
+  <li><%= link_to "Register", new_user_registration_path %></li>
+  <li><%= link_to "Log In", new_user_session_path %></li>
+
+<% elsif user_signed_in? %>
+  <li><%= link_to "Your Profile", user_path(current_user.id) %></li>
+  <li><%= link_to "Create Post", new_post_path %></li>
+  <li><%= link_to "Users", users_path %></li>
+
+  <% if current_user.requesting_friendships.any? { |r| r.accepted == false } %>
+    <li role="separator" class="divider"></li>            
+    <% current_user.requesting_friendships.each do |request| %>
+      <% if request.accepted == false %>
+        <li><%= button_to "Accept #{request.requester.email } as friend", friendship_path(current_user.id), method: :patch, params: {requestee_id: current_user.id, requester_id: request.requester_id} , :class => "btn btn-primary btn-xs" %></li>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <li role="separator" class="divider"></li>
+  <li><%= link_to "Log Out", destroy_user_session_path, method: :post %></li>
+<% end %>

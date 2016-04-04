@@ -1,6 +1,10 @@
 <p id="notice"><%= notice %></p>
 
-
+<h2>Your Posts</h2>
+<% @authored_posts.each do |p| %>
+	<div class="post"><%= p.content %></div>
+<% end %>
+<br>
 User <%= @user.id %> |
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', :back %>

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   # GET /trainers/1
   # GET /trainers/1.json
   def show
+    @authored_posts = current_user.authored_posts
   end
 
   # CREATE is done by devise
@@ -33,11 +34,13 @@ class UsersController < ApplicationController
   end
 
   # DELETE is not provided to user
+  def destroy
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-    	if params[:id]
+    	if params[:id].is_a?(Integer)
     		@user = User.find(params[:id]) 
     	else
     		@user = User.find(current_user.id)

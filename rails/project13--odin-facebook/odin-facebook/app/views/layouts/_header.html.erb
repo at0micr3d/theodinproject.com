@@ -14,18 +14,7 @@
   			<span class="caret"></span>
   		</button>
   		<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-  			<% if !user_signed_in? %>
-    			<li><%= link_to "Register", new_user_registration_path %></li>
-    		<% elsif user_signed_in? %>
-  	  		<li><%= link_to "Your feed", user_path(current_user.id) %></li>
-  			  <li><%= link_to "Users", users_path %></li>
-  			  <li role="separator" class="divider"></li>
-  			  <% current_user.requesting_friendships.each do |request| %>
-  			    <% if request.accepted == false %>
-    			    <li><%= button_to "Accept #{request.requester.email } as friend", friendship_path(current_user.id), method: :patch, params: {requestee_id: current_user.id, requester_id: request.requester_id} , :class => "btn btn-primary btn-xs" %></li>
-   			    <% end %>
- 			    <% end %>
-    		<% end %>
+  			<%= render 'layouts/menu' %>
   		</ul>
   	</div>
 
