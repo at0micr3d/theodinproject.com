@@ -18,8 +18,12 @@ class User < ActiveRecord::Base
 
   # Likes and author of posts
   has_many :authored_posts, class_name: "Post", foreign_key: :author_id
-  has_many :user_posts
-  has_many :liked_posts, through: :user_posts, source: :post
+  has_many :likes
+  has_many :liked_posts, through: :likes, source: :post
+
+  def has_liked?(post)
+    liked_posts.any? { |p| p.id == post.id }
+  end
 
 
   def admin?

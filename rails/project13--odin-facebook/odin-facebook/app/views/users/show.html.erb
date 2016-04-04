@@ -2,7 +2,15 @@
 
 <h2>Your Posts</h2>
 <% @authored_posts.each do |p| %>
-	<div class="post"><%= p.content %></div>
+	<div class="post">
+		<% if current_user.has_liked?(p) %>
+			<p style="background-color: green; color: white; padding: 1px 2px 2px 1px"><span class="glyphicon glyphicon-ok"></span> Liked!<p>
+		<% else %>
+		  <%= button_to "Like", likes_path, method: "post", params: {user_id: current_user.id, post_id: p.id }, :class => "btn btn-primary btn-xs" %>
+		<% end %>
+		
+		<%= p.content %>
+	</div>
 <% end %>
 <br>
 User <%= @user.id %> |

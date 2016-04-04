@@ -2,10 +2,12 @@ class LikesController < ApplicationController
 	before_filter :redirect_back
 
 	def create
-		@user_post = UserPost.new(user_post_params)
-		if @user_post.save
-			flash[:success] = "Liked!"
-			redirect_to session[:my_previous_url]n
+		@like = Like.new(like_params)
+		@like.user_id = params[:user_id]
+		@like.post_id = params[:post_id]
+		if @like.save
+			flash.now[:success] = "Liked!"
+			redirect_to session[:my_previous_url]
 		else
 			flash[:error] = "Unable to like :("
 			redirect_to session[:my_previous_url]
@@ -18,8 +20,8 @@ class LikesController < ApplicationController
 
 	private
     # Never trust parameters from the scary internet, only allow the white list through.
-    def user_post_params
-      params.fetch(:user_post, {}).permit(:user_id, :post_id)
+    def like_params
+      params.fetch(:like, {}).permit(:user_id, :post_id)
     end
 
     def redirect_back

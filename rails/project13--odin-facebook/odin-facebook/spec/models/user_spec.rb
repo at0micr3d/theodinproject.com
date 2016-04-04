@@ -50,7 +50,7 @@ RSpec.describe User, type: :model do
 		it { is_expected.to have_many(:requesting_friends) }
 		it { is_expected.to have_many(:requested_friends) }
 		it { is_expected.to have_many(:authored_posts) }
-		it { is_expected.to have_many(:user_posts) }
+		it { is_expected.to have_many(:likes) }
 		it { is_expected.to have_many(:liked_posts) }
 	end
 
@@ -183,6 +183,24 @@ RSpec.describe User, type: :model do
       it "returns true when other user has requested a friendship" do
       	expect(user.friend_invite_pending?(pending)).to eq true
       end
+		end
+
+		describe "#has_liked?" do
+			let(:user) { create(:user) }
+			let(:like_post) { create(:post) }
+			let(:not_like_post) { create(:post) }
+
+			before :each do
+				create(:like, :user_id => user.id, :post_id => like_post.id)
+			end
+
+			it "returns false if a post is not liked by user" do
+				expect(user.has_liked?(not_like_post)).to eq false
+			end
+
+			it "returns true if a post is liked by user" do
+				expect(user.has_liked?(like_post)).to eq true
+			end
 		end
 	end
 

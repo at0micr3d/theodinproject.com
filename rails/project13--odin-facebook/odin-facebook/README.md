@@ -37,8 +37,8 @@ User:
 	has_many :requested_friends, through: :requested_friendships, source: :requestee
 
 	has_many :authored_posts, class_name: "Post", foreign_key: :author
-	has_many :user_posts
-	has_many :liked_posts, through: :user_posts, source: :post
+	has_many :likes
+	has_many :liked_posts, through: :likes, source: :post
 
 ```
 
@@ -63,8 +63,8 @@ Post:
 	belongs_to :author, class_name: "User"
 	author_id
 
-	has_many :user_posts
-	has_many :likers, through: :user_posts, source: :user
+	has_many :likes
+	has_many :likers, through: :likes, source: :user
 
 	has_many :comments
 ```

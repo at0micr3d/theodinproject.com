@@ -4,8 +4,8 @@ class Post < ActiveRecord::Base
 	validates :author_id, presence: true
 	validates :content, presence: true
 
-	has_many :user_posts
-	has_many :likers, through: :user_posts, source: :user
+	has_many :likes
+	has_many :likers, through: :likes, source: :user
 
 	
 	
