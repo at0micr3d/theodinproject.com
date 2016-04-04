@@ -49,7 +49,9 @@ RSpec.describe User, type: :model do
 		it { is_expected.to have_many(:requested_friendships).dependent(:destroy) }
 		it { is_expected.to have_many(:requesting_friends) }
 		it { is_expected.to have_many(:requested_friends) }
-		
+		it { is_expected.to have_many(:authored_posts) }
+		it { is_expected.to have_many(:user_posts) }
+		it { is_expected.to have_many(:liked_posts) }
 	end
 
 	describe "methods" do

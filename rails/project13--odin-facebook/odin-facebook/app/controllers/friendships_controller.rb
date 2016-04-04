@@ -18,9 +18,9 @@ class FriendshipsController < ApplicationController
     accepting_user.accept_request(requesting_user)
 
     if accepting_user.friends_with?(requesting_user)
-      redirect_to users_url, :flash => { :notice => "You're now friends!" }
+      redirect_to user_url, :flash => { :notice => "You're now friends!" }
     else
-      redirect_to users_url, :flash => { :notice => "Friend acceptation failed!" }
+      redirect_to user_url, :flash => { :notice => "Friend acceptation failed!" }
     end
   end
 
