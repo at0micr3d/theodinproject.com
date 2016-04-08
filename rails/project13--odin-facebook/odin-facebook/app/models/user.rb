@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
 
+  has_many :comments, foreign_key: :author_id
+  
   def has_liked?(post)
     liked_posts.any? { |p| p.id == post.id }
   end

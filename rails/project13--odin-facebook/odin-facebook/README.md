@@ -13,7 +13,7 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * [DONE] Users can create Posts (text only to start).
 * [DONE] The Users Index page lists all users and buttons for sending Friend Requests to those who are not already friends or who don't already have a pending request.
 * [DONE] Users can Like Posts.
-* Users can Comment on Posts.
+* [DONE] Users can Comment on Posts.
 * Posts should always display with the post content, author, comments and likes.
 * Treat the Posts Index page like the real Facebook's "Timeline" feature -- show all the recent posts from the current user and users she is friends with.
 * Users can create a Profile with a Photo (just start by using the Gravatar image like you did in the Rails Tutorial).
@@ -40,6 +40,7 @@ User:
 	has_many :likes
 	has_many :liked_posts, through: :likes, source: :post
 
+	has_many :comments, foreign_key: :author_id
 ```
 
 ```ruby
@@ -72,5 +73,6 @@ Post:
 ```ruby
 Comment:
 	belongs_to :post
+	belongs_to :author, class_name: "User"
 	post_id
 ```

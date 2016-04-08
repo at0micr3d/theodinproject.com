@@ -1,0 +1,12 @@
+<div class="comment">
+	<div class="row">
+		<div class="col-sm-12">
+			<i><%= time_ago_in_words(comment.updated_at) %> ago, <%= comment.author.name %> wrote:</i>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<%= comment.content %>
+		</div>
+	</div>
+</div>

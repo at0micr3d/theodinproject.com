@@ -52,6 +52,7 @@ RSpec.describe User, type: :model do
 		it { is_expected.to have_many(:authored_posts) }
 		it { is_expected.to have_many(:likes) }
 		it { is_expected.to have_many(:liked_posts) }
+		it { is_expected.to have_many(:comments) }
 	end
 
 	describe "methods" do

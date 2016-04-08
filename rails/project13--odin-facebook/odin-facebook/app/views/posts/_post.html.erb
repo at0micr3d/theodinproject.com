@@ -10,5 +10,25 @@
 		<div class="col-sm-4">Author: <%= post.author.name %></div>
 		<div class="col-sm-4"><%= pluralize(post.likes.count , "like")%></div>
 	</div>
-	<%= post.content %>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<%= post.content %>
+			<hr>
+  	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-3">
+			
+			<%= render 'comments/form', post: post %>
+  	</div>
+	
+
+  	<div class="col-sm-9">
+  		<% post.comments.each do |c| %>
+    		<%= render 'comments/comment', comment: c %>
+  		<% end %>
+  	</div>
+  </div>
 </div>
