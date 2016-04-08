@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 feature 'user management' do
 	scenario "user signup" do
 		user = build(:user)
@@ -16,4 +15,5 @@ feature 'user management' do
 	  	click_button 'Sign up'
   	}.to change(User, :count).by(1)
 	end
+	
 end
