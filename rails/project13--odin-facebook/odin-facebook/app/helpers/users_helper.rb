@@ -6,4 +6,8 @@ module UsersHelper
     gravatar_url = "http://www.gravatar.com/avatar/#{gravatar_id}.jpg"
     image_tag(gravatar_url, alt: user.name, class: "gravatar", size: "50")
   end
+
+  def authorized?
+  	@user.id == current_user.id
+  end
 end

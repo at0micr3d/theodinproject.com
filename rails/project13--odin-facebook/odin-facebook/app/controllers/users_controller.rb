@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
+  #prepend_before_filter :set_user, :authorized?
   before_action :set_user, only: [:show, :edit, :update]
-
-	# GET /trainers
+  before_action :allowed?, only: [:edit, :update]
+	
+  # GET /trainers
   # GET /trainers.json
   def index
     @users = User.all.paginate :page => params[:page], per_page: 10
@@ -34,8 +36,7 @@ class UsersController < ApplicationController
   end
 
   # DELETE is not provided to user
-  def destroy
-  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -49,6 +50,10 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.fetch(:user, {})
+      params.fetch(:user, {}).permit(:firstname, :lastname, :age, :email)
+    end
+
+    def allowed?
+      redirect_to root_path unless view_context.authorized?
     end
 end
