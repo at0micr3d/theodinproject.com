@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    p @posts = Post.feed(current_user)
+    @posts = Post.feed(current_user)
   end
 
   # GET /posts/1

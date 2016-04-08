@@ -3,9 +3,7 @@ require 'rails_helper'
 feature 'posts' do
 	before :each do
     @user = create(:user, email: "test@test.com", password: "testtest")
-    sign_in @user
-
-    
+    sign_in @user    
 	end
 
   scenario "user can create a post" do
@@ -23,21 +21,33 @@ feature 'posts' do
   	expect(page).to have_http_status(200)
   end
 
-  given(:friend) { create(:user) }
-  given(:not_a_friend) { create(:user) }
-  given(:user_post) { create(:post, author_id: @user.id) }
-  given(:friend_post_1) { create(:post, author_id: friend.id) }
-  given(:friend_post_2) { create(:post, author_id: friend.id) }
+  given(:friend)            { create(:user) }
+  given(:not_a_friend)      { create(:user) }
+  given(:user_post)         { create(:post, author_id: @user.id) }
+  given(:friend_post_1)     { create(:post, author_id: friend.id) }
+  given(:friend_post_2)     { create(:post, author_id: friend.id) }
   given(:not_a_friend_post) { create(:post, author_id: not_a_friend.id) }
 
   scenario "index page shows all users and friends posts" do
+    user_post
+    friend
+    not_a_friend
+    friend_post_1
+    friend_post_2
+    not_a_friend_post
+    
+    @user.request_friendship(friend)
+    friend.accept_request(@user)       
+
+
     visit posts_path
-    expect(page).to have_content(@user.name)
+    
+    expect(page).to have_content(@user.firstname)
     expect(page).to have_content(friend.name, count: 2)
     expect(page).not_to have_content(not_a_friend.name)
 
     expect(page).to have_content(friend_post_1.content)
     expect(page).to have_content(friend_post_2.content)
-    expect(page).to have_content(user_post.content)
+    expect(page).to have_content(user_post.content) 
   end	
 end

@@ -24,7 +24,7 @@ RSpec.describe Post, type: :model do
 		context "#feed" do
 			before :each do
 				user.request_friendship(friend)
-				friend.accept_request(user)
+				friend.accept_request(user)				
 			end
 
 			it "shows own posts" do
