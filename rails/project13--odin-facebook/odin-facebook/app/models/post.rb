@@ -9,5 +9,8 @@ class Post < ActiveRecord::Base
 
 	has_many :comments
 	
+	def self.feed(user = current_user)
+		where(author_id: [user.id] + user.friends.to_a)
+	end
 	
 end

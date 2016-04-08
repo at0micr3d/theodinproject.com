@@ -17,7 +17,7 @@ class LikesController < ApplicationController
 	def destroy
 		@like = Like.find_by( user_id: params[:user_id], post_id: params[:post_id] )
 		if @like.destroy
-			flash.now[:success] = "Unliked!"
+			flash[:success] = "Unliked!"
 			redirect_to session[:my_previous_url]
 		else
 			flash[:error] = "Unable to unlike :("
