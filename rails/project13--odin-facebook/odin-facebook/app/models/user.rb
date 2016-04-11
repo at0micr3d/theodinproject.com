@@ -7,8 +7,10 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :omniauthable, :registerable, :recoverable, :rememberable, :trackable, :validatable
+  #enable the use of facebook to authenticate
+  devise :omniauthable, :omniauth_providers => [:facebook]
   validates :firstname, :lastname, :email, :age, presence: true
-  
+
   # Friendships with other users
   has_many :requesting_friendships, class_name: "Friendship", foreign_key: :requestee_id, dependent: :destroy
   has_many :requested_friendships, class_name: "Friendship", foreign_key: :requester_id, dependent: :destroy
@@ -24,6 +26,7 @@ class User < ActiveRecord::Base
   #comments on posts
   has_many :comments, foreign_key: :author_id
   
+
   def has_liked?(post)
     liked_posts.any? { |p| p.id == post.id }
   end
@@ -36,5 +39,14 @@ class User < ActiveRecord::Base
   	[firstname, lastname].join(' ')
   end
   
+  def self.from_omniauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.email = auth.info.email
+      user.firstname = auth.info.first_name
+      user.lastname = auth.info.last_name
+      user.password = Devise.friendly_token[0,20]
+    end
+  end
+
 end
 
