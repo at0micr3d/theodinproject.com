@@ -5,8 +5,12 @@ feature 'likes' do
 		@user = create(:user, email: "test@test.com", password: "testtest")
   	sign_in @user
 
+    save_and_open_page
+  
+
     visit new_post_path
-     
+
+    
     fill_in "post_content", with: Faker::Lorem.sentence
     click_button 'Create Post'
   end

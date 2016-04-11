@@ -23,9 +23,6 @@ This is the [final rails assignment](http://www.theodinproject.com/ruby-on-rails
 * Deploy your App to Heroku.
 * Set up the SendGrid add-on and start sending real emails. It's free for low usage tiers.
 
-### Bonus
-* Create an admin user with special privaliges.
-
 ## Models
 The following models were used: (non were damaged during the making of this app)
 
