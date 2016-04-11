@@ -6,11 +6,11 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :omniauthable, :registerable, :recoverable, :rememberable, :trackable, :validatable
-  #enable the use of facebook to authenticate
-  devise :omniauthable, :omniauth_providers => [:facebook]
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable
   validates :firstname, :lastname, :email, :age, presence: true
 
+  # omniauthable with facebook
+  devise :omniauthable, :omniauth_providers => [:facebook]
   # Friendships with other users
   has_many :requesting_friendships, class_name: "Friendship", foreign_key: :requestee_id, dependent: :destroy
   has_many :requested_friendships, class_name: "Friendship", foreign_key: :requester_id, dependent: :destroy
