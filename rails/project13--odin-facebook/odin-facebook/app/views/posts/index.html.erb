@@ -1,17 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Feed</h1>
+<h1><%= current_user.name %>'s feed</h1>
 
+<%= link_to 'New Post', new_post_path %>
+
+<hr>
 
 <% @posts.each do |post| %>
   
   <%= render 'posts/post', post: post %>
 
 <% end %>
-
-
-
-
-<br>
-
-<%= link_to 'New Post', new_post_path %>

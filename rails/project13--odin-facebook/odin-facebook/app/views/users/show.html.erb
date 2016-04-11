@@ -1,21 +1,19 @@
 <p id="notice"><%= notice %></p>
 
-<h2>Profile <small><%= link_to "edit", edit_user_url(@user), action: "edit" if authorized? %></small></h2>
 <section class="user_info">
 	<h3>
 		<%= gravatar_for @user %>
 		<%= @user.name %>
 	</h3> 
-	<p><%= @user.email %></p>
-	<p><%= @user.age %></p>
-
+	<p><strong>Email: </strong> <%= @user.email %></p>
+	<p><strong>Age: </strong> <%= @user.age %></p>
+	<p><small><%= link_to "edit", edit_user_url(@user), action: "edit" if authorized? %></small></p>
 </section>
+
+<hr>
 
 <h2>Your Posts</h2>
 <% @authored_posts.each do |p| %>
 	<%= render 'posts/post', post: p %>
 <% end %>
-<br>
-User <%= @user.id %> |
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', :back %>
+
